@@ -1,0 +1,35 @@
+import { NavLink } from 'react-router-dom'
+import { Home, FilePlus, Factory, Package, History } from 'lucide-react'
+
+export default function BottomNav() {
+  const navItems = [
+    { to: '/', icon: Home, label: 'Home' },
+    { to: '/create-po', icon: FilePlus, label: 'Create' },
+    { to: '/mills', icon: Factory, label: 'Mills' },
+    { to: '/products', icon: Package, label: 'Products' },
+    { to: '/history', icon: History, label: 'History' }
+  ]
+
+  return (
+    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 safe-area-inset-bottom z-50">
+      <div className="flex items-center justify-around h-16 max-w-full overflow-x-auto">
+        {navItems.map(({ to, icon: Icon, label }) => (
+          <NavLink
+            key={to}
+            to={to}
+            className={({ isActive }) =>
+              `flex flex-col items-center justify-center flex-1 h-full min-w-[60px] transition-colors whitespace-nowrap ${
+                isActive
+                  ? 'text-primary-600'
+                  : 'text-gray-600 hover:text-primary-500'
+              }`
+            }
+          >
+            <Icon size={24} />
+            <span className="text-xs mt-1">{label}</span>
+          </NavLink>
+        ))}
+      </div>
+    </nav>
+  )
+}
