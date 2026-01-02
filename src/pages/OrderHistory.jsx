@@ -7,16 +7,17 @@ import Input from '../components/Input'
 import EmptyState from '../components/EmptyState'
 import Loading from '../components/Loading'
 import Modal from '../components/Modal'
-import { History, Search, Download, Share2, Eye, Edit2 } from 'lucide-react'
+import { History, Search, Download, Share2, Eye, Edit2, Trash2 } from 'lucide-react'
 import { formatDate } from '../lib/utils'
 import EditPOModal from '../components/EditPOModal'
 
 export default function OrderHistory() {
-  const { purchaseOrders, companyDetails, loading, updatePO } = useData()
+  const { purchaseOrders, companyDetails, loading, updatePO, deletePO } = useData()
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedOrder, setSelectedOrder] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isEditOpen, setIsEditOpen] = useState(false)
+  const [deleteConfirm, setDeleteConfirm] = useState(null)
 
   const filteredOrders = useMemo(() => {
     if (!searchTerm) return purchaseOrders
@@ -55,6 +56,17 @@ export default function OrderHistory() {
     } catch (error) {
       console.error('Error sharing PDF:', error)
       alert('Failed to share PDF')
+    }
+  }
+
+  const handleDelete = async (id) => {
+    try {
+      await deletePO(id)
+      setDeleteConfirm(null)
+      alert('Purchase order deleted successfully')
+    } catch (error) {
+      console.error('Error deleting PO:', error)
+      alert('Failed to delete purchase order')
     }
   }
 
@@ -128,6 +140,14 @@ export default function OrderHistory() {
                     onClick={() => handleShare(order)}
                   >
                     <Share2 size={16} />
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="danger"
+                    onClick={() => setDeleteConfirm(order.id)}
+                  >
+                    <Trash2 size={16} />
+                    Delete
                   </Button>
                 </div>
               </div>
@@ -223,6 +243,41 @@ export default function OrderHistory() {
           onSave={() => setIsEditOpen(false)}
         />
       )}
+
+      {deleteConfirm && (
+        <Modal
+          isOpen={!!deleteConfirm}
+          onClose={() => setDeleteConfirm(null)}
+          title="Delete Purchase Order"
+          maxWidth="max-w-sm"
+        >
+          <div className="space-y-4">
+            <p className="text-gray-700">
+              Are you sure you want to delete PO #{purchaseOrders.find(po => po.id === deleteConfirm)?.po_number}?
+            </p>
+            <p className="text-sm text-gray-500">
+              This action cannot be undone.
+            </p>
+            <div className="flex gap-3">
+              <Button
+                fullWidth
+                variant="outline"
+                onClick={() => setDeleteConfirm(null)}
+              >
+                Cancel
+              </Button>
+              <Button
+                fullWidth
+                variant="danger"
+                onClick={() => handleDelete(deleteConfirm)}
+              >
+                Delete
+              </Button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   )
 }
+

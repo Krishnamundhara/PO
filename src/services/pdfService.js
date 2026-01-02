@@ -104,7 +104,7 @@ const createPDFContent = (po, companyDetails) => {
     <div style="padding: 20px; font-family: Arial, sans-serif;">
       <!-- Header -->
       <div style="text-align: center; margin-bottom: 1px;">
-        <h1 style="font-size: 18px; margin: 0; font-family: serif;">श्री गणेशाय नमः</h1>
+        <h1 style="font-size: 18px; margin: 0; font-family: serif;">|| श्री:गणेशाय नमः ||</h1>
       </div>
 
        <!-- Company Details -->

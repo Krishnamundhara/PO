@@ -307,6 +307,22 @@ export const DataProvider = ({ children }) => {
     }
   }
 
+  const deletePO = async (id) => {
+    setPurchaseOrders(purchaseOrders.filter(po => po.id !== id))
+
+    if (isOnline) {
+      const { error } = await supabase
+        .from('purchase_orders')
+        .delete()
+        .eq('id', id)
+        .eq('user_id', user.id)
+      if (error) throw error
+    } else {
+      await addToSyncQueue({ table: 'purchase_orders', action: 'delete', data: { id } })
+      await saveOfflineData('purchaseOrders', purchaseOrders.filter(po => po.id !== id))
+    }
+  }
+
   const updateCompanyDetails = async (details) => {
     setCompanyDetails(details)
 
@@ -370,6 +386,7 @@ export const DataProvider = ({ children }) => {
     deleteCustomer,
     addPurchaseOrder,
     updatePO,
+    deletePO,
     updateCompanyDetails,
     refreshData: fetchData
   }
