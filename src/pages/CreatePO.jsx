@@ -49,11 +49,16 @@ export default function CreatePO() {
     loadDraft()
   }, [setValue])
 
-  // Generate PO Number
+  // Generate PO Number - Use highest number + 1
   useEffect(() => {
     if (purchaseOrders.length > 0) {
-      const lastPO = purchaseOrders[0]
-      const newNumber = generatePONumber(lastPO.po_number)
+      // Find the highest PO number
+      const poNumbers = purchaseOrders
+        .map(po => parseInt(po.po_number) || 0)
+        .filter(num => num > 0)
+      
+      const highestNumber = Math.max(...poNumbers, 0)
+      const newNumber = String(highestNumber + 1)
       setValue('po_number', newNumber)
     } else {
       setValue('po_number', '1')
@@ -70,6 +75,14 @@ export default function CreatePO() {
   }, [formValues])
 
   const onSubmit = async (data) => {
+    // Check for duplicate PO number
+    const isDuplicate = purchaseOrders.some(po => po.po_number === data.po_number)
+    
+    if (isDuplicate) {
+      alert(`PO Number ${data.po_number} already exists. Please use a different number.`)
+      return
+    }
+    
     setFormData(data)
     setShowPreview(true)
   }

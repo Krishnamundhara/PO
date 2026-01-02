@@ -133,7 +133,7 @@ export default function Products() {
         onClose={closeModal}
         title={editingProduct ? 'Edit Product' : 'Add Product'}
       >
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <Input
             label="Product Name"
             required
@@ -148,7 +148,7 @@ export default function Products() {
             error={errors.description?.message}
           />
 
-          <div className="flex gap-3 pt-4">
+          <div className="flex gap-3 pt-6 sticky bottom-0 bg-white">
             <Button type="button" variant="secondary" onClick={closeModal} fullWidth>
               Cancel
             </Button>

@@ -24,15 +24,30 @@ export default function Mills() {
     reset,
     formState: { errors }
   } = useForm({
-    resolver: zodResolver(millSchema)
+    resolver: zodResolver(millSchema),
+    defaultValues: editingMill || {}
   })
 
   const openModal = (mill = null) => {
     setEditingMill(mill)
     if (mill) {
-      reset(mill)
+      reset({
+        name: mill.name || '',
+        contact: mill.contact || '',
+        email: mill.email || '',
+        address: mill.address || '',
+        gstin: mill.gstin || '',
+        mill_detail: mill.mill_detail || ''
+      })
     } else {
-      reset({})
+      reset({
+        name: '',
+        contact: '',
+        email: '',
+        address: '',
+        gstin: '',
+        mill_detail: ''
+      })
     }
     setIsModalOpen(true)
   }
@@ -48,13 +63,15 @@ export default function Mills() {
     try {
       if (editingMill) {
         await updateMill(editingMill.id, data)
+        alert('Mill updated successfully')
       } else {
         await addMill(data)
+        alert('Mill added successfully')
       }
       closeModal()
     } catch (error) {
       console.error('Error saving mill:', error)
-      alert('Failed to save mill')
+      alert(`Failed to save mill: ${error.message || 'Unknown error'}`)
     } finally {
       setSubmitting(false)
     }
@@ -142,7 +159,7 @@ export default function Mills() {
         onClose={closeModal}
         title={editingMill ? 'Edit Mill' : 'Add Mill'}
       >
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <Input
             label="Mill Name"
             required
@@ -184,7 +201,7 @@ export default function Mills() {
             error={errors.mill_detail?.message}
           />
 
-          <div className="flex gap-3 pt-4">
+          <div className="flex gap-3 pt-6 sticky bottom-0 bg-white">
             <Button type="button" variant="secondary" onClick={closeModal} fullWidth>
               Cancel
             </Button>

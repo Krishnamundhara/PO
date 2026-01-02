@@ -139,7 +139,7 @@ export default function Customers() {
         onClose={closeModal}
         title={editingCustomer ? 'Edit Customer' : 'Add Customer'}
       >
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <Input
             label="Customer Name"
             required
@@ -168,7 +168,7 @@ export default function Customers() {
             error={errors.address?.message}
           />
 
-          <div className="flex gap-3 pt-4">
+          <div className="flex gap-3 pt-6 sticky bottom-0 bg-white">
             <Button type="button" variant="secondary" onClick={closeModal} fullWidth>
               Cancel
             </Button>

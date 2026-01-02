@@ -10,7 +10,7 @@ import Select from './Select'
 import Textarea from './Textarea'
 
 export default function EditPOModal({ isOpen, onClose, order, onSave }) {
-  const { mills, products, customers, updatePO } = useData()
+  const { mills, products, customers, updatePO, purchaseOrders } = useData()
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
 
@@ -28,6 +28,17 @@ export default function EditPOModal({ isOpen, onClose, order, onSave }) {
     setSubmitting(true)
     setError('')
     try {
+      // Check for duplicate PO numbers (excluding current order)
+      const isDuplicate = purchaseOrders.some(po => 
+        po.id !== order.id && po.po_number === data.po_number
+      )
+      
+      if (isDuplicate) {
+        setError(`PO Number ${data.po_number} already exists. Please use a different number.`)
+        setSubmitting(false)
+        return
+      }
+
       await updatePO(order.id, data)
       onSave()
       onClose()
@@ -56,7 +67,6 @@ export default function EditPOModal({ isOpen, onClose, order, onSave }) {
         <Input
           label="PO Number"
           required
-          disabled
           {...register('po_number')}
           error={errors.po_number?.message}
         />
