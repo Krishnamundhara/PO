@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useData } from '../contexts/DataContext'
 import { millSchema } from '../lib/validation'
-import Button from '../components/Button'
+import { FlowButton } from '../components/ui/FlowButton'
 import Input from '../components/Input'
 import Textarea from '../components/Textarea'
 import Modal from '../components/Modal'
@@ -96,17 +96,14 @@ export default function Mills() {
     <div className="container-mobile py-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Mills</h1>
-        <Button onClick={() => openModal()}>
-          <Plus size={20} />
-          Add Mill
-        </Button>
+        <FlowButton onClick={() => openModal()} text="Add Mill" color="success" />
       </div>
 
       {mills.length > 0 ? (
-        <div className="space-y-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {mills.map((mill) => (
-            <Card key={mill.id}>
-              <div className="flex items-start justify-between">
+            <Card key={mill.id} className="h-full flex flex-col">
+              <div className="flex items-start justify-between h-full">
                 <div className="flex-1">
                   <h3 className="font-medium text-lg">{mill.name}</h3>
                   {mill.contact && (
@@ -146,10 +143,7 @@ export default function Mills() {
           title="No mills yet"
           description="Add your first mill to get started with creating purchase orders"
           action={
-            <Button onClick={() => openModal()}>
-              <Plus size={20} />
-              Add Mill
-            </Button>
+            <FlowButton onClick={() => openModal()} text="Add Mill" color="success" />
           }
         />
       )}
@@ -158,56 +152,59 @@ export default function Mills() {
         isOpen={isModalOpen}
         onClose={closeModal}
         title={editingMill ? 'Edit Mill' : 'Add Mill'}
+        maxWidth="max-w-2xl"
       >
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-          <Input
-            label="Mill Name"
-            required
-            {...register('name')}
-            error={errors.name?.message}
-          />
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col h-full">
+          <div className="flex-1 overflow-y-auto p-4 md:p-5 space-y-4 md:space-y-5">
+            <Input
+              label="Mill Name"
+              required
+              className="py-3"
+              {...register('name')}
+              error={errors.name?.message}
+            />
 
-          <Input
-            label="Contact"
-            type="tel"
-            {...register('contact')}
-            error={errors.contact?.message}
-          />
+            <Input
+              label="Contact"
+              type="tel"
+              className="py-3"
+              {...register('contact')}
+              error={errors.contact?.message}
+            />
 
-          <Input
-            label="Email"
-            type="email"
-            {...register('email')}
-            error={errors.email?.message}
-          />
+            <Input
+              label="Email"
+              type="email"
+              className="py-3"
+              {...register('email')}
+              error={errors.email?.message}
+            />
 
-          <Textarea
-            label="Address"
-            rows={3}
-            {...register('address')}
-            error={errors.address?.message}
-          />
+            <Textarea
+              label="Address"
+              rows={5}
+              {...register('address')}
+              error={errors.address?.message}
+            />
 
-          <Input
-            label="GSTIN"
-            {...register('gstin')}
-            error={errors.gstin?.message}
-          />
+            <Input
+              label="GSTIN"
+              className="py-3"
+              {...register('gstin')}
+              error={errors.gstin?.message}
+            />
 
-          <Textarea
-            label="Mill Details"
-            rows={3}
-            {...register('mill_detail')}
-            error={errors.mill_detail?.message}
-          />
+            <Textarea
+              label="Mill Details"
+              rows={5}
+              {...register('mill_detail')}
+              error={errors.mill_detail?.message}
+            />
+          </div>
 
-          <div className="flex gap-3 pt-6 sticky bottom-0 bg-white">
-            <Button type="button" variant="secondary" onClick={closeModal} fullWidth>
-              Cancel
-            </Button>
-            <Button type="submit" fullWidth loading={submitting}>
-              {editingMill ? 'Update' : 'Add'}
-            </Button>
+          <div className="flex-shrink-0 flex gap-4 md:gap-3 p-4 md:p-5 border-t bg-gray-50">
+            <FlowButton type="button" onClick={closeModal} fullWidth text="Cancel" color="neutral" />
+            <FlowButton type="submit" fullWidth loading={submitting} text={editingMill ? 'Update' : 'Add'} color="success" />
           </div>
         </form>
       </Modal>

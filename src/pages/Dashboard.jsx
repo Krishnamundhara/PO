@@ -25,7 +25,7 @@ export default function Dashboard() {
   return (
     <div className="container-mobile py-6 space-y-6">
       {/* Stats */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card>
           <div className="text-center">
             <div className="text-3xl font-bold text-primary-600">{purchaseOrders.length}</div>
@@ -55,7 +55,7 @@ export default function Dashboard() {
       {/* Quick Actions */}
       <div>
         <h2 className="text-lg font-semibold mb-4">Quick Actions</h2>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {quickActions.map(({ icon: Icon, label, path, color }) => (
             <Card
               key={path}
@@ -85,10 +85,10 @@ export default function Dashboard() {
           </button>
         </div>
         {recentOrders.length > 0 ? (
-          <div className="space-y-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {recentOrders.map((order) => (
-              <Card key={order.id} onClick={() => navigate('/history')}>
-                <div className="flex justify-between items-start">
+              <Card key={order.id} onClick={() => navigate('/history')} className="h-full flex flex-col">
+                <div className="flex justify-between items-start h-full">
                   <div className="flex-1">
                     <div className="font-medium text-primary-600">PO #{order.po_number}</div>
                     <div className="text-sm text-gray-600 mt-1">{order.party_name}</div>

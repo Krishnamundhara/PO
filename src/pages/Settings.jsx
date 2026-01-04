@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useAuth } from '../contexts/AuthContext'
 import { useData } from '../contexts/DataContext'
 import { companyDetailsSchema } from '../lib/validation'
-import Button from '../components/Button'
+import { FlowButton } from '../components/ui/FlowButton'
 import Input from '../components/Input'
 import Textarea from '../components/Textarea'
 import Card from '../components/Card'
@@ -226,22 +226,18 @@ export default function Settings() {
             error={errors.logo?.message}
           />
 
-          <Button type="submit" fullWidth loading={submitting}>
-            Save Company Details
-          </Button>
+          <FlowButton type="submit" fullWidth loading={submitting} text="Save Company Details" color="success" />
         </form>
       </Card>
 
       <Card>
         <h2 className="text-lg font-semibold mb-4">Account</h2>
-        <Button
-          variant="danger"
+        <FlowButton
           fullWidth
           onClick={handleSignOut}
-        >
-          <LogOut size={20} />
-          Sign Out
-        </Button>
+          text="Sign Out"
+          color="danger"
+        />
       </Card>
 
       <div className="mt-8 text-center text-sm text-gray-500">

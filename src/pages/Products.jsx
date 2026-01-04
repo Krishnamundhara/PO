@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useData } from '../contexts/DataContext'
 import { productSchema } from '../lib/validation'
-import Button from '../components/Button'
+import { FlowButton } from '../components/ui/FlowButton'
 import Input from '../components/Input'
 import Textarea from '../components/Textarea'
 import Modal from '../components/Modal'
@@ -79,17 +79,14 @@ export default function Products() {
     <div className="container-mobile py-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Products</h1>
-        <Button onClick={() => openModal()}>
-          <Plus size={20} />
-          Add Product
-        </Button>
+        <FlowButton onClick={() => openModal()} text="Add Product" color="success" />
       </div>
 
       {products.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {products.map((product) => (
-            <Card key={product.id}>
-              <div className="flex items-start justify-between">
+            <Card key={product.id} className="h-full flex flex-col">
+              <div className="flex items-start justify-between h-full">
                 <div className="flex-1">
                   <h3 className="font-medium">{product.name}</h3>
                   {product.description && (
@@ -120,10 +117,7 @@ export default function Products() {
           title="No products yet"
           description="Add products to quickly fill in purchase orders"
           action={
-            <Button onClick={() => openModal()}>
-              <Plus size={20} />
-              Add Product
-            </Button>
+            <FlowButton onClick={() => openModal()} text="Add Product" color="success" />
           }
         />
       )}
@@ -132,29 +126,29 @@ export default function Products() {
         isOpen={isModalOpen}
         onClose={closeModal}
         title={editingProduct ? 'Edit Product' : 'Add Product'}
+        maxWidth="max-w-2xl"
       >
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-          <Input
-            label="Product Name"
-            required
-            {...register('name')}
-            error={errors.name?.message}
-          />
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col h-full">
+          <div className="flex-1 overflow-y-auto p-4 md:p-5 space-y-4 md:space-y-5">
+            <Input
+              label="Product Name"
+              required
+              className="py-3"
+              {...register('name')}
+              error={errors.name?.message}
+            />
 
-          <Textarea
-            label="Description"
-            rows={3}
-            {...register('description')}
-            error={errors.description?.message}
-          />
+            <Textarea
+              label="Description"
+              rows={5}
+              {...register('description')}
+              error={errors.description?.message}
+            />
+          </div>
 
-          <div className="flex gap-3 pt-6 sticky bottom-0 bg-white">
-            <Button type="button" variant="secondary" onClick={closeModal} fullWidth>
-              Cancel
-            </Button>
-            <Button type="submit" fullWidth loading={submitting}>
-              {editingProduct ? 'Update' : 'Add'}
-            </Button>
+          <div className="flex-shrink-0 flex gap-2 md:gap-3 p-4 md:p-5 border-t bg-gray-50">
+            <FlowButton type="button" onClick={closeModal} fullWidth text="Cancel" color="neutral" />
+            <FlowButton type="submit" fullWidth loading={submitting} text={editingProduct ? 'Update' : 'Add'} color="success" />
           </div>
         </form>
       </Modal>

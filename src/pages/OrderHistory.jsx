@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import { useData } from '../contexts/DataContext'
 import { downloadPDF, sharePDF } from '../services/pdfService'
 import Card from '../components/Card'
-import Button from '../components/Button'
+import { FlowButton } from '../components/ui/FlowButton'
 import Input from '../components/Input'
 import EmptyState from '../components/EmptyState'
 import Loading from '../components/Loading'
@@ -90,10 +90,10 @@ export default function OrderHistory() {
       </div>
 
       {filteredOrders.length > 0 ? (
-        <div className="space-y-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredOrders.map((order) => (
-            <Card key={order.id}>
-              <div className="space-y-2">
+            <Card key={order.id} className="h-full flex flex-col">
+              <div className="space-y-2 flex-1">
                 <div className="flex justify-between items-start">
                   <div>
                     <div className="font-medium text-primary-600">PO #{order.po_number}</div>
@@ -111,44 +111,31 @@ export default function OrderHistory() {
                 </div>
 
                 <div className="flex gap-2 pt-2 flex-wrap">
-                  <Button
-                    size="sm"
-                    variant="outline"
+                  <FlowButton
                     onClick={() => viewOrder(order)}
-                  >
-                    <Eye size={16} />
-                    View
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
+                    text="View"
+                    color="info"
+                  />
+                  <FlowButton
                     onClick={() => editOrder(order)}
-                  >
-                    <Edit2 size={16} />
-                    Edit
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="secondary"
+                    text="Edit"
+                    color="warning"
+                  />
+                  <FlowButton
                     onClick={() => handleDownload(order)}
-                  >
-                    <Download size={16} />
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="secondary"
+                    text="Download"
+                    color="info"
+                  />
+                  <FlowButton
                     onClick={() => handleShare(order)}
-                  >
-                    <Share2 size={16} />
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="danger"
+                    text="Share"
+                    color="info"
+                  />
+                  <FlowButton
                     onClick={() => setDeleteConfirm(order.id)}
-                  >
-                    <Trash2 size={16} />
-                    Delete
-                  </Button>
+                    text="Delete"
+                    color="danger"
+                  />
                 </div>
               </div>
             </Card>
@@ -215,22 +202,18 @@ export default function OrderHistory() {
           </div>
 
           <div className="flex gap-3 mt-6">
-            <Button
+            <FlowButton
               fullWidth
-              variant="secondary"
               onClick={() => handleDownload(selectedOrder)}
-            >
-              <Download size={20} />
-              Download
-            </Button>
-            <Button
+              text="Download"
+              color="info"
+            />
+            <FlowButton
               fullWidth
-              variant="outline"
               onClick={() => handleShare(selectedOrder)}
-            >
-              <Share2 size={20} />
-              Share
-            </Button>
+              text="Share"
+              color="info"
+            />
           </div>
         </Modal>
       )}
@@ -259,20 +242,18 @@ export default function OrderHistory() {
               This action cannot be undone.
             </p>
             <div className="flex gap-3">
-              <Button
+              <FlowButton
                 fullWidth
-                variant="outline"
                 onClick={() => setDeleteConfirm(null)}
-              >
-                Cancel
-              </Button>
-              <Button
+                text="Cancel"
+                color="neutral"
+              />
+              <FlowButton
                 fullWidth
-                variant="danger"
                 onClick={() => handleDelete(deleteConfirm)}
-              >
-                Delete
-              </Button>
+                text="Delete"
+                color="danger"
+              />
             </div>
           </div>
         </Modal>

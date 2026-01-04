@@ -7,7 +7,7 @@ import { purchaseOrderSchema } from '../lib/validation'
 import { generatePONumber } from '../lib/utils'
 import { getDraft, saveDraft, clearDraft } from '../lib/offline'
 import { downloadPDF, sharePDF } from '../services/pdfService'
-import Button from '../components/Button'
+import { FlowButton } from '../components/ui/FlowButton'
 import Input from '../components/Input'
 import Select from '../components/Select'
 import Textarea from '../components/Textarea'
@@ -184,17 +184,9 @@ export default function CreatePO() {
         </div>
 
         <div className="space-y-3">
-          <Button fullWidth onClick={handleConfirm} loading={loading}>
-            Confirm & Save
-          </Button>
-          <Button fullWidth variant="secondary" onClick={handleDownload}>
-            <Download size={20} />
-            Download PDF
-          </Button>
-          <Button fullWidth variant="outline" onClick={handleShare}>
-            <Share2 size={20} />
-            Share PDF
-          </Button>
+          <FlowButton fullWidth onClick={handleConfirm} loading={loading} text="Confirm & Save" color="success" />
+          <FlowButton fullWidth onClick={handleDownload} text="Download PDF" color="info" />
+          <FlowButton fullWidth onClick={handleShare} text="Share PDF" color="info" />
         </div>
       </div>
     )
@@ -311,9 +303,7 @@ export default function CreatePO() {
         />
 
         <div className="pt-4">
-          <Button type="submit" fullWidth>
-            Preview Order
-          </Button>
+          <FlowButton type="submit" fullWidth text="Preview Order" />
         </div>
       </form>
     </div>

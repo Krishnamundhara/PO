@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import Button from '../components/Button'
+import { FlowButton } from '../components/ui/FlowButton'
 import Input from '../components/Input'
 
 export default function Login() {
@@ -65,13 +65,13 @@ export default function Login() {
             </div>
           )}
 
-          <Button
+          <FlowButton
             type="submit"
             fullWidth
             loading={loading}
-          >
-            {isSignUp ? 'Sign Up' : 'Sign In'}
-          </Button>
+            text={isSignUp ? 'Sign Up' : 'Sign In'}
+            color="success"
+          />
         </form>
 
         <div className="mt-6 text-center">
