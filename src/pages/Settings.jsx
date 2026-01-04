@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import toast from 'react-hot-toast'
 import { useAuth } from '../contexts/AuthContext'
 import { useData } from '../contexts/DataContext'
 import { companyDetailsSchema } from '../lib/validation'
@@ -106,10 +107,10 @@ export default function Settings() {
     setSubmitting(true)
     try {
       await updateCompanyDetails(data)
-      alert('Company details updated successfully')
+      toast.success('Company details updated successfully')
     } catch (error) {
       console.error('Error updating company details:', error)
-      alert('Failed to update company details')
+      toast.error('Failed to update company details')
     } finally {
       setSubmitting(false)
     }

@@ -1,8 +1,9 @@
 import { FlowButton } from '../components/ui/FlowButton'
+import toast from 'react-hot-toast'
 
 export default function FlowButtonDemo() {
   const handleClick = () => {
-    alert('Flow Button clicked!')
+    toast.success('Flow Button clicked!')
   }
 
   return (

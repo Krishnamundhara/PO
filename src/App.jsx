@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Suspense, lazy } from 'react'
+import { Toaster } from 'react-hot-toast'
 import { AuthProvider } from './contexts/AuthContext'
 import { DataProvider } from './contexts/DataContext'
 import { OfflineProvider } from './contexts/OfflineContext'
@@ -21,6 +22,7 @@ const FlowButtonDemo = lazy(() => import('./pages/FlowButtonDemo'))
 function App() {
   return (
     <BrowserRouter>
+      <Toaster position="top-center" reverseOrder={false} />
       <AuthProvider>
         <OfflineProvider>
           <DataProvider>

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import toast from 'react-hot-toast'
 import { useData } from '../contexts/DataContext'
 import { millSchema } from '../lib/validation'
 import { FlowButton } from '../components/ui/FlowButton'
@@ -63,15 +64,15 @@ export default function Mills() {
     try {
       if (editingMill) {
         await updateMill(editingMill.id, data)
-        alert('Mill updated successfully')
+        toast.success('Mill updated successfully')
       } else {
         await addMill(data)
-        alert('Mill added successfully')
+        toast.success('Mill added successfully')
       }
       closeModal()
     } catch (error) {
       console.error('Error saving mill:', error)
-      alert(`Failed to save mill: ${error.message || 'Unknown error'}`)
+      toast.error(`Failed to save mill: ${error.message || 'Unknown error'}`)
     } finally {
       setSubmitting(false)
     }
@@ -81,9 +82,10 @@ export default function Mills() {
     if (window.confirm('Are you sure you want to delete this mill?')) {
       try {
         await deleteMill(id)
+        toast.success('Mill deleted successfully')
       } catch (error) {
         console.error('Error deleting mill:', error)
-        alert('Failed to delete mill')
+        toast.error('Failed to delete mill')
       }
     }
   }

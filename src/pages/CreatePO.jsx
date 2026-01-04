@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast'
 import { useData } from '../contexts/DataContext'
 import { purchaseOrderSchema } from '../lib/validation'
 import { generatePONumber } from '../lib/utils'
@@ -79,7 +80,7 @@ export default function CreatePO() {
     const isDuplicate = purchaseOrders.some(po => po.po_number === data.po_number)
     
     if (isDuplicate) {
-      alert(`PO Number ${data.po_number} already exists. Please use a different number.`)
+      toast.error(`PO Number ${data.po_number} already exists. Please use a different number.`)
       return
     }
     
@@ -92,10 +93,11 @@ export default function CreatePO() {
     try {
       await addPurchaseOrder(formData)
       await clearDraft('create_po')
+      toast.success('Purchase order created successfully')
       navigate('/history')
     } catch (error) {
       console.error('Error creating PO:', error)
-      alert('Failed to create purchase order')
+      toast.error('Failed to create purchase order')
     } finally {
       setLoading(false)
     }
@@ -103,19 +105,20 @@ export default function CreatePO() {
 
   const handleDownload = async () => {
     try {
-      await downloadPDF(formData, companyDetails)
+      toast.success('PDF downloaded successfully')
     } catch (error) {
       console.error('Error downloading PDF:', error)
-      alert('Failed to download PDF')
+      toast.error('Failed to download PDF')
     }
   }
 
   const handleShare = async () => {
     try {
       await sharePDF(formData, companyDetails)
+      toast.success('PDF shared successfully')
     } catch (error) {
       console.error('Error sharing PDF:', error)
-      alert('Failed to share PDF')
+      toast.error('Failed to share PDF')
     }
   }
 

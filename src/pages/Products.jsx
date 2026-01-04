@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import toast from 'react-hot-toast'
 import { useData } from '../contexts/DataContext'
 import { productSchema } from '../lib/validation'
 import { FlowButton } from '../components/ui/FlowButton'
@@ -48,13 +49,15 @@ export default function Products() {
     try {
       if (editingProduct) {
         await updateProduct(editingProduct.id, data)
+        toast.success('Product updated successfully')
       } else {
         await addProduct(data)
+        toast.success('Product added successfully')
       }
       closeModal()
     } catch (error) {
       console.error('Error saving product:', error)
-      alert('Failed to save product')
+      toast.error('Failed to save product')
     } finally {
       setSubmitting(false)
     }
@@ -64,9 +67,10 @@ export default function Products() {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
         await deleteProduct(id)
+        toast.success('Product deleted successfully')
       } catch (error) {
         console.error('Error deleting product:', error)
-        alert('Failed to delete product')
+        toast.error('Failed to delete product')
       }
     }
   }

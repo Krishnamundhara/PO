@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import toast from 'react-hot-toast'
 import { useData } from '../contexts/DataContext'
 import { downloadPDF, sharePDF } from '../services/pdfService'
 import Card from '../components/Card'
@@ -44,18 +45,20 @@ export default function OrderHistory() {
   const handleDownload = async (order) => {
     try {
       await downloadPDF(order, companyDetails)
+      toast.success('PDF downloaded successfully')
     } catch (error) {
       console.error('Error downloading PDF:', error)
-      alert('Failed to download PDF')
+      toast.error('Failed to download PDF')
     }
   }
 
   const handleShare = async (order) => {
     try {
       await sharePDF(order, companyDetails)
+      toast.success('PDF shared successfully')
     } catch (error) {
       console.error('Error sharing PDF:', error)
-      alert('Failed to share PDF')
+      toast.error('Failed to share PDF')
     }
   }
 
@@ -63,10 +66,10 @@ export default function OrderHistory() {
     try {
       await deletePO(id)
       setDeleteConfirm(null)
-      alert('Purchase order deleted successfully')
+      toast.success('Purchase order deleted successfully')
     } catch (error) {
       console.error('Error deleting PO:', error)
-      alert('Failed to delete purchase order')
+      toast.error('Failed to delete purchase order')
     }
   }
 

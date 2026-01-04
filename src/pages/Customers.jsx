@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import toast from 'react-hot-toast'
 import { useData } from '../contexts/DataContext'
 import { customerSchema } from '../lib/validation'
 import { FlowButton } from '../components/ui/FlowButton'
@@ -48,13 +49,15 @@ export default function Customers() {
     try {
       if (editingCustomer) {
         await updateCustomer(editingCustomer.id, data)
+        toast.success('Customer updated successfully')
       } else {
         await addCustomer(data)
+        toast.success('Customer added successfully')
       }
       closeModal()
     } catch (error) {
       console.error('Error saving customer:', error)
-      alert('Failed to save customer')
+      toast.error('Failed to save customer')
     } finally {
       setSubmitting(false)
     }
@@ -64,9 +67,10 @@ export default function Customers() {
     if (window.confirm('Are you sure you want to delete this customer?')) {
       try {
         await deleteCustomer(id)
+        toast.success('Customer deleted successfully')
       } catch (error) {
         console.error('Error deleting customer:', error)
-        alert('Failed to delete customer')
+        toast.error('Failed to delete customer')
       }
     }
   }
