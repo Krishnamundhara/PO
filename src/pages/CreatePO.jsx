@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { useData } from '../contexts/DataContext'
-import { purchaseOrderSchema } from '../lib/validation'
+import { purchaseOrderSchema, customerSchema, millSchema, productSchema } from '../lib/validation'
 import { generatePONumber } from '../lib/utils'
 import { getDraft, saveDraft, clearDraft } from '../lib/offline'
 import { downloadPDF, sharePDF } from '../services/pdfService'
@@ -12,14 +12,21 @@ import { FlowButton } from '../components/ui/FlowButton'
 import Input from '../components/Input'
 import Select from '../components/Select'
 import Textarea from '../components/Textarea'
-import { ArrowLeft, Download, Share2 } from 'lucide-react'
+import Modal from '../components/Modal'
+import { ArrowLeft, Download, Share2, Plus } from 'lucide-react'
 
 export default function CreatePO() {
   const navigate = useNavigate()
-  const { mills, products, customers, purchaseOrders, companyDetails, addPurchaseOrder } = useData()
+  const { mills, products, customers, purchaseOrders, companyDetails, addPurchaseOrder, addCustomer, addMill, addProduct } = useData()
   const [loading, setLoading] = useState(false)
   const [showPreview, setShowPreview] = useState(false)
   const [formData, setFormData] = useState(null)
+  
+  // Quick add modals state
+  const [customerModalOpen, setCustomerModalOpen] = useState(false)
+  const [millModalOpen, setMillModalOpen] = useState(false)
+  const [productModalOpen, setProductModalOpen] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
 
   const {
     register,
@@ -35,6 +42,19 @@ export default function CreatePO() {
       weight_unit: 'Kg',
       quantity_unit: 'Bags'
     }
+  })
+
+  // Quick add forms
+  const customerForm = useForm({
+    resolver: zodResolver(customerSchema)
+  })
+
+  const millForm = useForm({
+    resolver: zodResolver(millSchema)
+  })
+
+  const productForm = useForm({
+    resolver: zodResolver(productSchema)
   })
 
   // Load draft on mount
@@ -119,6 +139,55 @@ export default function CreatePO() {
     } catch (error) {
       console.error('Error sharing PDF:', error)
       toast.error('Failed to share PDF')
+    }
+  }
+
+  // Quick add handlers
+  const handleAddCustomer = async (data) => {
+    setSubmitting(true)
+    try {
+      await addCustomer(data)
+      toast.success('Customer added successfully')
+      setValue('party_name', data.name)
+      setCustomerModalOpen(false)
+      customerForm.reset({})
+    } catch (error) {
+      console.error('Error adding customer:', error)
+      toast.error('Failed to add customer')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const handleAddMill = async (data) => {
+    setSubmitting(true)
+    try {
+      await addMill(data)
+      toast.success('Mill added successfully')
+      setValue('mill', data.name)
+      setMillModalOpen(false)
+      millForm.reset({})
+    } catch (error) {
+      console.error('Error adding mill:', error)
+      toast.error('Failed to add mill')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const handleAddProduct = async (data) => {
+    setSubmitting(true)
+    try {
+      await addProduct(data)
+      toast.success('Product added successfully')
+      setValue('product', data.name)
+      setProductModalOpen(false)
+      productForm.reset({})
+    } catch (error) {
+      console.error('Error adding product:', error)
+      toast.error('Failed to add product')
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -218,14 +287,26 @@ export default function CreatePO() {
           error={errors.date?.message}
         />
 
-        <Select
-          label="Party Name"
-          required
-          options={customers.map(c => ({ value: c.name, label: c.name }))}
-          placeholder="Select customer"
-          {...register('party_name')}
-          error={errors.party_name?.message}
-        />
+        <div className="flex gap-2 items-end">
+          <div className="flex-1">
+            <Select
+              label="Party Name"
+              required
+              options={customers.map(c => ({ value: c.name, label: c.name }))}
+              placeholder="Select customer"
+              {...register('party_name')}
+              error={errors.party_name?.message}
+            />
+          </div>
+          <button
+            type="button"
+            onClick={() => setCustomerModalOpen(true)}
+            className="mb-1 p-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+            title="Add new customer"
+          >
+            <Plus size={20} />
+          </button>
+        </div>
 
         <Input
           label="Broker"
@@ -233,23 +314,47 @@ export default function CreatePO() {
           error={errors.broker?.message}
         />
 
-        <Select
-          label="Mill"
-          required
-          options={mills.map(m => ({ value: m.name, label: m.name }))}
-          placeholder="Select mill"
-          {...register('mill')}
-          error={errors.mill?.message}
-        />
+        <div className="flex gap-2 items-end">
+          <div className="flex-1">
+            <Select
+              label="Mill"
+              required
+              options={mills.map(m => ({ value: m.name, label: m.name }))}
+              placeholder="Select mill"
+              {...register('mill')}
+              error={errors.mill?.message}
+            />
+          </div>
+          <button
+            type="button"
+            onClick={() => setMillModalOpen(true)}
+            className="mb-1 p-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+            title="Add new mill"
+          >
+            <Plus size={20} />
+          </button>
+        </div>
 
-        <Select
-          label="Product"
-          required
-          options={products.map(p => ({ value: p.name, label: p.name }))}
-          placeholder="Select product"
-          {...register('product')}
-          error={errors.product?.message}
-        />
+        <div className="flex gap-2 items-end">
+          <div className="flex-1">
+            <Select
+              label="Product"
+              required
+              options={products.map(p => ({ value: p.name, label: p.name }))}
+              placeholder="Select product"
+              {...register('product')}
+              error={errors.product?.message}
+            />
+          </div>
+          <button
+            type="button"
+            onClick={() => setProductModalOpen(true)}
+            className="mb-1 p-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+            title="Add new product"
+          >
+            <Plus size={20} />
+          </button>
+        </div>
 
         <Input
           label="Rate"
@@ -309,6 +414,122 @@ export default function CreatePO() {
           <FlowButton type="submit" fullWidth text="Preview Order" />
         </div>
       </form>
+
+      {/* Quick Add Customer Modal */}
+      <Modal
+        isOpen={customerModalOpen}
+        onClose={() => { setCustomerModalOpen(false); customerForm.reset({}) }}
+        title="Add Customer"
+        maxWidth="max-w-md"
+      >
+        <form onSubmit={customerForm.handleSubmit(handleAddCustomer)} className="flex flex-col h-full">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <Input
+              label="Customer Name"
+              required
+              {...customerForm.register('name')}
+              error={customerForm.formState.errors.name?.message}
+            />
+            <Input
+              label="Contact"
+              type="tel"
+              {...customerForm.register('contact')}
+              error={customerForm.formState.errors.contact?.message}
+            />
+            <Input
+              label="Email"
+              type="email"
+              {...customerForm.register('email')}
+              error={customerForm.formState.errors.email?.message}
+            />
+            <Textarea
+              label="Address"
+              rows={3}
+              {...customerForm.register('address')}
+              error={customerForm.formState.errors.address?.message}
+            />
+          </div>
+          <div className="flex-shrink-0 flex gap-2 p-4 border-t bg-gray-50">
+            <FlowButton type="button" onClick={() => { setCustomerModalOpen(false); customerForm.reset({}) }} fullWidth text="Cancel" color="neutral" />
+            <FlowButton type="submit" fullWidth loading={submitting} text="Add" color="success" />
+          </div>
+        </form>
+      </Modal>
+
+      {/* Quick Add Mill Modal */}
+      <Modal
+        isOpen={millModalOpen}
+        onClose={() => { setMillModalOpen(false); millForm.reset({}) }}
+        title="Add Mill"
+        maxWidth="max-w-md"
+      >
+        <form onSubmit={millForm.handleSubmit(handleAddMill)} className="flex flex-col h-full">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <Input
+              label="Mill Name"
+              required
+              {...millForm.register('name')}
+              error={millForm.formState.errors.name?.message}
+            />
+            <Input
+              label="Contact"
+              type="tel"
+              {...millForm.register('contact')}
+              error={millForm.formState.errors.contact?.message}
+            />
+            <Input
+              label="Email"
+              type="email"
+              {...millForm.register('email')}
+              error={millForm.formState.errors.email?.message}
+            />
+            <Textarea
+              label="Address"
+              rows={3}
+              {...millForm.register('address')}
+              error={millForm.formState.errors.address?.message}
+            />
+            <Input
+              label="GSTIN"
+              {...millForm.register('gstin')}
+              error={millForm.formState.errors.gstin?.message}
+            />
+          </div>
+          <div className="flex-shrink-0 flex gap-2 p-4 border-t bg-gray-50">
+            <FlowButton type="button" onClick={() => { setMillModalOpen(false); millForm.reset({}) }} fullWidth text="Cancel" color="neutral" />
+            <FlowButton type="submit" fullWidth loading={submitting} text="Add" color="success" />
+          </div>
+        </form>
+      </Modal>
+
+      {/* Quick Add Product Modal */}
+      <Modal
+        isOpen={productModalOpen}
+        onClose={() => { setProductModalOpen(false); productForm.reset({}) }}
+        title="Add Product"
+        maxWidth="max-w-md"
+      >
+        <form onSubmit={productForm.handleSubmit(handleAddProduct)} className="flex flex-col h-full">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <Input
+              label="Product Name"
+              required
+              {...productForm.register('name')}
+              error={productForm.formState.errors.name?.message}
+            />
+            <Textarea
+              label="Description"
+              rows={3}
+              {...productForm.register('description')}
+              error={productForm.formState.errors.description?.message}
+            />
+          </div>
+          <div className="flex-shrink-0 flex gap-2 p-4 border-t bg-gray-50">
+            <FlowButton type="button" onClick={() => { setProductModalOpen(false); productForm.reset({}) }} fullWidth text="Cancel" color="neutral" />
+            <FlowButton type="submit" fullWidth loading={submitting} text="Add" color="success" />
+          </div>
+        </form>
+      </Modal>
     </div>
   )
 }
