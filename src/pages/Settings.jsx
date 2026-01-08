@@ -1,17 +1,26 @@
+// React and form libraries
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import toast from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom'
+
+// Custom contexts
 import { useAuth } from '../contexts/AuthContext'
 import { useData } from '../contexts/DataContext'
 import { useTheme } from '../contexts/ThemeContext'
+
+// Validation schema
 import { companyDetailsSchema } from '../lib/validation'
+
+// UI Components
 import { FlowButton } from '../components/ui/FlowButton'
 import Input from '../components/Input'
 import Textarea from '../components/Textarea'
 import Card from '../components/Card'
-import { LogOut, Building2, Upload, X, Sun, Moon } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+
+// Icons from lucide-react
+import { Building2, Upload, X, Sun, Moon } from 'lucide-react'
 
 export default function Settings() {
   const { signOut } = useAuth()
@@ -132,6 +141,35 @@ export default function Settings() {
       <h1 className="text-2xl font-bold mb-6">Settings</h1>
 
       <Card className="mb-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            {isDark ? <Moon size={24} className="text-primary-400" /> : <Sun size={24} className="text-primary-600" />}
+            <div>
+              <h2 className="text-lg font-semibold">Theme</h2>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                {isDark ? 'Dark mode is on' : 'Light mode is on'}
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={toggleTheme}
+            className={`relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 ${
+              isDark ? 'bg-primary-600' : 'bg-gray-300'
+            }`}
+            aria-label="Toggle theme"
+          >
+            <span
+              className={`inline-flex h-5 w-5 transform items-center justify-center rounded-full bg-white shadow-md transition-transform duration-300 ${
+                isDark ? 'translate-x-8' : 'translate-x-1'
+              }`}
+            >
+              {isDark ? <Moon size={12} className="text-primary-600" /> : <Sun size={12} className="text-yellow-500" />}
+            </span>
+          </button>
+        </div>
+      </Card>
+
+      <Card className="mb-4">
         <div className="flex items-center gap-3 mb-4">
           <Building2 size={24} className="text-primary-600 dark:text-primary-400" />
           <h2 className="text-lg font-semibold">Company Details</h2>
@@ -233,34 +271,6 @@ export default function Settings() {
         </form>
       </Card>
 
-      <Card className="mb-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            {isDark ? <Moon size={24} className="text-primary-400" /> : <Sun size={24} className="text-primary-600" />}
-            <div>
-              <h2 className="text-lg font-semibold">Appearance</h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                {isDark ? 'Dark mode is on' : 'Light mode is on'}
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={toggleTheme}
-            className={`relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 ${
-              isDark ? 'bg-primary-600' : 'bg-gray-300'
-            }`}
-            aria-label="Toggle theme"
-          >
-            <span
-              className={`inline-flex h-5 w-5 transform items-center justify-center rounded-full bg-white shadow-md transition-transform duration-300 ${
-                isDark ? 'translate-x-8' : 'translate-x-1'
-              }`}
-            >
-              {isDark ? <Moon size={12} className="text-primary-600" /> : <Sun size={12} className="text-yellow-500" />}
-            </span>
-          </button>
-        </div>
-      </Card>
 
       <Card>
         <h2 className="text-lg font-semibold mb-4">Account</h2>
