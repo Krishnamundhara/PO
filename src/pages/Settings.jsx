@@ -4,17 +4,19 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import toast from 'react-hot-toast'
 import { useAuth } from '../contexts/AuthContext'
 import { useData } from '../contexts/DataContext'
+import { useTheme } from '../contexts/ThemeContext'
 import { companyDetailsSchema } from '../lib/validation'
 import { FlowButton } from '../components/ui/FlowButton'
 import Input from '../components/Input'
 import Textarea from '../components/Textarea'
 import Card from '../components/Card'
-import { LogOut, Building2, Upload, X } from 'lucide-react'
+import { LogOut, Building2, Upload, X, Sun, Moon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 export default function Settings() {
   const { signOut } = useAuth()
   const { companyDetails, updateCompanyDetails } = useData()
+  const { theme, toggleTheme, isDark } = useTheme()
   const navigate = useNavigate()
   const [submitting, setSubmitting] = useState(false)
   const [logoPreview, setLogoPreview] = useState(companyDetails?.logo || null)
@@ -131,7 +133,7 @@ export default function Settings() {
 
       <Card className="mb-4">
         <div className="flex items-center gap-3 mb-4">
-          <Building2 size={24} className="text-primary-600" />
+          <Building2 size={24} className="text-primary-600 dark:text-primary-400" />
           <h2 className="text-lg font-semibold">Company Details</h2>
         </div>
 
@@ -176,14 +178,14 @@ export default function Settings() {
 
           {/* Logo Upload Section */}
           <div className="space-y-3">
-            <label className="block text-sm font-medium text-gray-700">Logo</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Logo</label>
             
             {logoPreview && (
               <div className="relative inline-block">
                 <img 
                   src={logoPreview} 
                   alt="Logo preview" 
-                  className="h-24 w-24 object-contain border border-gray-200 rounded"
+                  className="h-24 w-24 object-contain border border-gray-200 dark:border-gray-600 rounded bg-white dark:bg-gray-700"
                 />
                 <button
                   type="button"
@@ -196,14 +198,14 @@ export default function Settings() {
             )}
 
             {uploadError && (
-              <p className="text-sm text-red-600">{uploadError}</p>
+              <p className="text-sm text-red-600 dark:text-red-400">{uploadError}</p>
             )}
 
             <div className="flex gap-2">
               <label className="flex-1">
-                <div className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary-500 cursor-pointer transition">
-                  <Upload size={18} className="text-gray-600" />
-                  <span className="text-sm text-gray-600">Choose Image</span>
+                <div className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-primary-500 dark:hover:border-primary-400 cursor-pointer transition">
+                  <Upload size={18} className="text-gray-600 dark:text-gray-400" />
+                  <span className="text-sm text-gray-600 dark:text-gray-400">Choose Image</span>
                 </div>
                 <input
                   type="file"
@@ -214,7 +216,7 @@ export default function Settings() {
               </label>
             </div>
             
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-gray-500 dark:text-gray-400">
               PNG, JPG, or GIF. Max 2MB.
             </p>
           </div>
@@ -231,6 +233,35 @@ export default function Settings() {
         </form>
       </Card>
 
+      <Card className="mb-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            {isDark ? <Moon size={24} className="text-primary-400" /> : <Sun size={24} className="text-primary-600" />}
+            <div>
+              <h2 className="text-lg font-semibold">Appearance</h2>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                {isDark ? 'Dark mode is on' : 'Light mode is on'}
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={toggleTheme}
+            className={`relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 ${
+              isDark ? 'bg-primary-600' : 'bg-gray-300'
+            }`}
+            aria-label="Toggle theme"
+          >
+            <span
+              className={`inline-flex h-5 w-5 transform items-center justify-center rounded-full bg-white shadow-md transition-transform duration-300 ${
+                isDark ? 'translate-x-8' : 'translate-x-1'
+              }`}
+            >
+              {isDark ? <Moon size={12} className="text-primary-600" /> : <Sun size={12} className="text-yellow-500" />}
+            </span>
+          </button>
+        </div>
+      </Card>
+
       <Card>
         <h2 className="text-lg font-semibold mb-4">Account</h2>
         <FlowButton
@@ -241,7 +272,7 @@ export default function Settings() {
         />
       </Card>
 
-      <div className="mt-8 text-center text-sm text-gray-500">
+      <div className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
         <p>PO Generator v1.0.0</p>
         <p className="mt-1">Mobile-first Purchase Order Management</p>
       </div>

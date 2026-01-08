@@ -94,25 +94,25 @@ export default function Customers() {
                 <div className="flex-1">
                   <h3 className="font-medium text-lg">{customer.name}</h3>
                   {customer.contact && (
-                    <p className="text-sm text-gray-600 mt-1">{customer.contact}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">{customer.contact}</p>
                   )}
                   {customer.email && (
-                    <p className="text-sm text-gray-600">{customer.email}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">{customer.email}</p>
                   )}
                   {customer.address && (
-                    <p className="text-sm text-gray-500 mt-2">{customer.address}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">{customer.address}</p>
                   )}
                 </div>
                 <div className="flex gap-2">
                   <button
                     onClick={() => openModal(customer)}
-                    className="tap-target p-2 text-primary-600 hover:bg-primary-50 rounded"
+                    className="tap-target p-2 text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded transition-colors"
                   >
                     <Edit2 size={18} />
                   </button>
                   <button
                     onClick={() => handleDelete(customer.id)}
-                    className="tap-target p-2 text-red-600 hover:bg-red-50 rounded"
+                    className="tap-target p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded transition-colors"
                   >
                     <Trash2 size={18} />
                   </button>
@@ -172,7 +172,7 @@ export default function Customers() {
             />
           </div>
 
-          <div className="flex-shrink-0 flex gap-2 md:gap-3 p-4 md:p-5 border-t bg-gray-50">
+          <div className="flex-shrink-0 flex gap-2 md:gap-3 p-4 md:p-5 border-t dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
             <FlowButton type="button" onClick={closeModal} fullWidth text="Cancel" color="neutral" />
             <FlowButton type="submit" fullWidth loading={submitting} text={editingCustomer ? 'Update' : 'Add'} color="success" />
           </div>

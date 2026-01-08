@@ -28,26 +28,26 @@ export default function Dashboard() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card>
           <div className="text-center">
-            <div className="text-3xl font-bold text-primary-600">{purchaseOrders.length}</div>
-            <div className="text-sm text-gray-600 mt-1">Total Orders</div>
+            <div className="text-3xl font-bold text-primary-600 dark:text-primary-400">{purchaseOrders.length}</div>
+            <div className="text-sm text-gray-600 dark:text-gray-300 mt-1">Total Orders</div>
           </div>
         </Card>
         <Card>
           <div className="text-center">
-            <div className="text-3xl font-bold text-green-600">{mills.length}</div>
-            <div className="text-sm text-gray-600 mt-1">Mills</div>
+            <div className="text-3xl font-bold text-green-600 dark:text-green-400">{mills.length}</div>
+            <div className="text-sm text-gray-600 dark:text-gray-300 mt-1">Mills</div>
           </div>
         </Card>
         <Card>
           <div className="text-center">
-            <div className="text-3xl font-bold text-purple-600">{products.length}</div>
-            <div className="text-sm text-gray-600 mt-1">Products</div>
+            <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">{products.length}</div>
+            <div className="text-sm text-gray-600 dark:text-gray-300 mt-1">Products</div>
           </div>
         </Card>
         <Card>
           <div className="text-center">
-            <div className="text-3xl font-bold text-orange-600">{customers.length}</div>
-            <div className="text-sm text-gray-600 mt-1">Customers</div>
+            <div className="text-3xl font-bold text-orange-600 dark:text-orange-400">{customers.length}</div>
+            <div className="text-sm text-gray-600 dark:text-gray-300 mt-1">Customers</div>
           </div>
         </Card>
       </div>
@@ -79,7 +79,7 @@ export default function Dashboard() {
           <h2 className="text-lg font-semibold">Recent Orders</h2>
           <button
             onClick={() => navigate('/history')}
-            className="text-primary-600 text-sm hover:text-primary-700"
+            className="text-primary-600 dark:text-primary-400 text-sm hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
           >
             View All
           </button>
@@ -90,13 +90,13 @@ export default function Dashboard() {
               <Card key={order.id} onClick={() => navigate('/history')} className="h-full flex flex-col">
                 <div className="flex justify-between items-start h-full">
                   <div className="flex-1">
-                    <div className="font-medium text-primary-600">PO #{order.po_number}</div>
-                    <div className="text-sm text-gray-600 mt-1">{order.party_name}</div>
-                    <div className="text-xs text-gray-500 mt-1">{order.product}</div>
+                    <div className="font-medium text-primary-600 dark:text-primary-400">PO #{order.po_number}</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-300 mt-1">{order.party_name}</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">{order.product}</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm text-gray-500">{formatDate(order.date)}</div>
-                    <div className="text-xs text-gray-400 mt-1">{order.mill}</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">{formatDate(order.date)}</div>
+                    <div className="text-xs text-gray-400 dark:text-gray-500 mt-1">{order.mill}</div>
                   </div>
                 </div>
               </Card>
@@ -104,12 +104,12 @@ export default function Dashboard() {
           </div>
         ) : (
           <Card>
-            <div className="text-center py-8 text-gray-500">
-              <FilePlus size={48} className="mx-auto mb-2 text-gray-400" />
+            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+              <FilePlus size={48} className="mx-auto mb-2 text-gray-400 dark:text-gray-500" />
               <p>No orders yet</p>
               <button
                 onClick={() => navigate('/create-po')}
-                className="text-primary-600 hover:text-primary-700 mt-2"
+                className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 mt-2 transition-colors"
               >
                 Create your first order
               </button>

@@ -197,17 +197,17 @@ export default function CreatePO() {
         <div className="mb-4 flex items-center justify-between">
           <button
             onClick={() => setShowPreview(false)}
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+            className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
           >
             <ArrowLeft size={20} />
             Back to Edit
           </button>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-4">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-4 transition-colors">
           <h2 className="text-xl font-bold mb-4 text-center">Purchase Order Preview</h2>
           
-          <div className="space-y-3 border-t pt-4">
+          <div className="space-y-3 border-t dark:border-gray-700 pt-4">
             <div className="flex justify-between">
               <span className="font-medium">PO Number:</span>
               <span>{formData.po_number}</span>
@@ -247,9 +247,9 @@ export default function CreatePO() {
               <span>{formData.quantity} {formData.quantity_unit}</span>
             </div>
             {formData.terms_conditions && (
-              <div className="pt-3 border-t">
+              <div className="pt-3 border-t dark:border-gray-700">
                 <span className="font-medium">Terms & Conditions:</span>
-                <p className="mt-2 text-gray-700 whitespace-pre-wrap">{formData.terms_conditions}</p>
+                <p className="mt-2 text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{formData.terms_conditions}</p>
               </div>
             )}
           </div>
@@ -268,7 +268,7 @@ export default function CreatePO() {
     <div className="container-mobile py-6">
       <div className="mb-6">
         <h1 className="text-2xl font-bold">Create Purchase Order</h1>
-        <p className="text-gray-600 text-sm mt-1">Fill in the details below</p>
+        <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">Fill in the details below</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -301,7 +301,7 @@ export default function CreatePO() {
           <button
             type="button"
             onClick={() => setCustomerModalOpen(true)}
-            className="mb-1 p-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+            className="mb-1 p-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 hover:scale-110 hover:rotate-90 active:scale-95 transition-all duration-200 shadow-md hover:shadow-lg"
             title="Add new customer"
           >
             <Plus size={20} />
@@ -328,7 +328,7 @@ export default function CreatePO() {
           <button
             type="button"
             onClick={() => setMillModalOpen(true)}
-            className="mb-1 p-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+            className="mb-1 p-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 hover:scale-110 hover:rotate-90 active:scale-95 transition-all duration-200 shadow-md hover:shadow-lg"
             title="Add new mill"
           >
             <Plus size={20} />
@@ -349,7 +349,7 @@ export default function CreatePO() {
           <button
             type="button"
             onClick={() => setProductModalOpen(true)}
-            className="mb-1 p-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+            className="mb-1 p-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 hover:scale-110 hover:rotate-90 active:scale-95 transition-all duration-200 shadow-md hover:shadow-lg"
             title="Add new product"
           >
             <Plus size={20} />
@@ -449,7 +449,7 @@ export default function CreatePO() {
               error={customerForm.formState.errors.address?.message}
             />
           </div>
-          <div className="flex-shrink-0 flex gap-2 p-4 border-t bg-gray-50">
+          <div className="flex-shrink-0 flex gap-2 p-4 border-t dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
             <FlowButton type="button" onClick={() => { setCustomerModalOpen(false); customerForm.reset({}) }} fullWidth text="Cancel" color="neutral" />
             <FlowButton type="submit" fullWidth loading={submitting} text="Add" color="success" />
           </div>
@@ -495,7 +495,7 @@ export default function CreatePO() {
               error={millForm.formState.errors.gstin?.message}
             />
           </div>
-          <div className="flex-shrink-0 flex gap-2 p-4 border-t bg-gray-50">
+          <div className="flex-shrink-0 flex gap-2 p-4 border-t dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
             <FlowButton type="button" onClick={() => { setMillModalOpen(false); millForm.reset({}) }} fullWidth text="Cancel" color="neutral" />
             <FlowButton type="submit" fullWidth loading={submitting} text="Add" color="success" />
           </div>
@@ -524,7 +524,7 @@ export default function CreatePO() {
               error={productForm.formState.errors.description?.message}
             />
           </div>
-          <div className="flex-shrink-0 flex gap-2 p-4 border-t bg-gray-50">
+          <div className="flex-shrink-0 flex gap-2 p-4 border-t dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
             <FlowButton type="button" onClick={() => { setProductModalOpen(false); productForm.reset({}) }} fullWidth text="Cancel" color="neutral" />
             <FlowButton type="submit" fullWidth loading={submitting} text="Add" color="success" />
           </div>

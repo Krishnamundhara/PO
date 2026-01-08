@@ -99,15 +99,15 @@ export default function OrderHistory() {
               <div className="space-y-2 flex-1">
                 <div className="flex justify-between items-start">
                   <div>
-                    <div className="font-medium text-primary-600">PO #{order.po_number}</div>
-                    <div className="text-sm text-gray-600 mt-1">{order.party_name}</div>
+                    <div className="font-medium text-primary-600 dark:text-primary-400">PO #{order.po_number}</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-300 mt-1">{order.party_name}</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm text-gray-500">{formatDate(order.date)}</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">{formatDate(order.date)}</div>
                   </div>
                 </div>
                 
-                <div className="text-sm text-gray-600">
+                <div className="text-sm text-gray-600 dark:text-gray-300">
                   <div>Mill: {order.mill}</div>
                   <div>Product: {order.product}</div>
                   <div>Qty: {order.quantity} {order.quantity_unit}</div>
@@ -195,9 +195,9 @@ export default function OrderHistory() {
               <span>{selectedOrder.quantity} {selectedOrder.quantity_unit}</span>
             </div>
             {selectedOrder.terms_conditions && (
-              <div className="pt-3 border-t">
+              <div className="pt-3 border-t dark:border-gray-700">
                 <span className="font-medium">Terms & Conditions:</span>
-                <p className="mt-2 text-gray-700 whitespace-pre-wrap text-sm">
+                <p className="mt-2 text-gray-700 dark:text-gray-300 whitespace-pre-wrap text-sm">
                   {selectedOrder.terms_conditions}
                 </p>
               </div>
@@ -238,10 +238,10 @@ export default function OrderHistory() {
           maxWidth="max-w-sm"
         >
           <div className="space-y-4">
-            <p className="text-gray-700">
+            <p className="text-gray-700 dark:text-gray-300">
               Are you sure you want to delete PO #{purchaseOrders.find(po => po.id === deleteConfirm)?.po_number}?
             </p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               This action cannot be undone.
             </p>
             <div className="flex gap-3">
