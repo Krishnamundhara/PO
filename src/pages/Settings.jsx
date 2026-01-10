@@ -137,29 +137,29 @@ export default function Settings() {
   }
 
   return (
-    <div className="container-mobile py-6">
-      <h1 className="text-2xl font-bold mb-6">Settings</h1>
+    <div className="container-mobile py-4 sm:py-6">
+      <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Settings</h1>
 
-      <Card className="mb-4 overflow-hidden">
+      <Card className="mb-3 sm:mb-4 overflow-hidden">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <div className={`transition-all duration-500 ease-out ${isDark ? 'rotate-0 scale-100' : 'rotate-[360deg] scale-100'}`}>
               {isDark ? (
-                <Moon size={24} className="text-primary-400 animate-pulse" />
+                <Moon size={20} className="sm:w-6 sm:h-6 text-primary-400 animate-pulse" />
               ) : (
-                <Sun size={24} className="text-amber-500 animate-[spin_8s_linear_infinite]" />
+                <Sun size={20} className="sm:w-6 sm:h-6 text-amber-500 animate-[spin_8s_linear_infinite]" />
               )}
             </div>
             <div>
-              <h2 className="text-lg font-semibold">Theme</h2>
-              <p className={`text-sm transition-all duration-300 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                {isDark ? '🌙 Dark mode is on' : '☀️ Light mode is on'}
+              <h2 className="text-base sm:text-lg font-semibold">Theme</h2>
+              <p className={`text-xs sm:text-sm transition-all duration-300 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                {isDark ? '🌙 Dark mode' : '☀️ Light mode'}
               </p>
             </div>
           </div>
           <button
             onClick={toggleTheme}
-            className={`group relative inline-flex h-8 w-16 items-center rounded-full transition-all duration-500 ease-out focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 hover:scale-105 active:scale-95 ${
+            className={`group relative inline-flex h-7 w-14 sm:h-8 sm:w-16 items-center rounded-full transition-all duration-500 ease-out focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 hover:scale-105 active:scale-95 ${
               isDark 
                 ? 'bg-gradient-to-r from-indigo-600 via-purple-600 to-primary-600 shadow-lg shadow-purple-500/30' 
                 : 'bg-gradient-to-r from-amber-300 via-orange-300 to-yellow-400 shadow-lg shadow-amber-300/50'
@@ -168,37 +168,37 @@ export default function Settings() {
           >
             {/* Stars/Sun rays background effect */}
             <span className={`absolute inset-0 rounded-full overflow-hidden transition-opacity duration-500 ${isDark ? 'opacity-100' : 'opacity-0'}`}>
-              <span className="absolute top-1 left-2 w-1 h-1 bg-white rounded-full animate-pulse"></span>
+              <span className="absolute top-1 left-2 w-0.5 h-0.5 sm:w-1 sm:h-1 bg-white rounded-full animate-pulse"></span>
               <span className="absolute top-3 left-4 w-0.5 h-0.5 bg-white rounded-full animate-pulse delay-100"></span>
               <span className="absolute top-2 right-3 w-0.5 h-0.5 bg-white rounded-full animate-pulse delay-200"></span>
             </span>
             
             <span
-              className={`relative inline-flex h-6 w-6 transform items-center justify-center rounded-full shadow-lg transition-all duration-500 ease-out ${
+              className={`relative inline-flex h-5 w-5 sm:h-6 sm:w-6 transform items-center justify-center rounded-full shadow-lg transition-all duration-500 ease-out ${
                 isDark 
-                  ? 'translate-x-9 bg-gradient-to-br from-slate-700 to-slate-900 rotate-[360deg]' 
+                  ? 'translate-x-8 sm:translate-x-9 bg-gradient-to-br from-slate-700 to-slate-900 rotate-[360deg]' 
                   : 'translate-x-1 bg-gradient-to-br from-yellow-200 to-amber-400 rotate-0'
               }`}
             >
               {/* Icon with fade transition */}
               <span className={`absolute transition-all duration-300 ease-out ${isDark ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-0 rotate-90'}`}>
-                <Moon size={14} className="text-blue-300" />
+                <Moon size={12} className="sm:w-3.5 sm:h-3.5 text-blue-300" />
               </span>
               <span className={`absolute transition-all duration-300 ease-out ${!isDark ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-0 -rotate-90'}`}>
-                <Sun size={14} className="text-amber-600" />
+                <Sun size={12} className="sm:w-3.5 sm:h-3.5 text-amber-600" />
               </span>
             </span>
           </button>
         </div>
       </Card>
 
-      <Card className="mb-4">
-        <div className="flex items-center gap-3 mb-4">
-          <Building2 size={24} className="text-primary-600 dark:text-primary-400" />
-          <h2 className="text-lg font-semibold">Company Details</h2>
+      <Card className="mb-3 sm:mb-4">
+        <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+          <Building2 size={20} className="sm:w-6 sm:h-6 text-primary-600 dark:text-primary-400" />
+          <h2 className="text-base sm:text-lg font-semibold">Company Details</h2>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 sm:space-y-4">
           <Input
             label="Company Name"
             required
@@ -208,34 +208,38 @@ export default function Settings() {
 
           <Textarea
             label="Address"
-            rows={3}
+            rows={2}
             {...register('address')}
             error={errors.address?.message}
           />
 
-          <Input
-            label="Bank Name"
-            {...register('bank_name')}
-            error={errors.bank_name?.message}
-          />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <Input
+              label="Bank Name"
+              {...register('bank_name')}
+              error={errors.bank_name?.message}
+            />
 
-          <Input
-            label="Account Number"
-            {...register('account_number')}
-            error={errors.account_number?.message}
-          />
+            <Input
+              label="Account Number"
+              {...register('account_number')}
+              error={errors.account_number?.message}
+            />
+          </div>
 
-          <Input
-            label="IFSC Code"
-            {...register('ifsc_code')}
-            error={errors.ifsc_code?.message}
-          />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <Input
+              label="IFSC Code"
+              {...register('ifsc_code')}
+              error={errors.ifsc_code?.message}
+            />
 
-          <Input
-            label="Branch"
-            {...register('branch')}
-            error={errors.branch?.message}
-          />
+            <Input
+              label="Branch"
+              {...register('branch')}
+              error={errors.branch?.message}
+            />
+          </div>
 
           {/* Logo Upload Section */}
           <div className="space-y-3">
@@ -246,27 +250,27 @@ export default function Settings() {
                 <img 
                   src={logoPreview} 
                   alt="Logo preview" 
-                  className="h-24 w-24 object-contain border border-gray-200 dark:border-gray-600 rounded bg-white dark:bg-gray-700"
+                  className="h-16 w-16 sm:h-24 sm:w-24 object-contain border border-gray-200 dark:border-gray-600 rounded bg-white dark:bg-gray-700"
                 />
                 <button
                   type="button"
                   onClick={removeLogo}
                   className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
                 >
-                  <X size={14} />
+                  <X size={12} className="sm:w-3.5 sm:h-3.5" />
                 </button>
               </div>
             )}
 
             {uploadError && (
-              <p className="text-sm text-red-600 dark:text-red-400">{uploadError}</p>
+              <p className="text-xs sm:text-sm text-red-600 dark:text-red-400">{uploadError}</p>
             )}
 
             <div className="flex gap-2">
               <label className="flex-1">
-                <div className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-primary-500 dark:hover:border-primary-400 cursor-pointer transition">
-                  <Upload size={18} className="text-gray-600 dark:text-gray-400" />
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Choose Image</span>
+                <div className="flex items-center justify-center gap-2 px-3 py-2.5 sm:px-4 sm:py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-primary-500 dark:hover:border-primary-400 cursor-pointer transition">
+                  <Upload size={16} className="sm:w-[18px] sm:h-[18px] text-gray-600 dark:text-gray-400" />
+                  <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Choose Image</span>
                 </div>
                 <input
                   type="file"
@@ -277,7 +281,7 @@ export default function Settings() {
               </label>
             </div>
             
-            <p className="text-xs text-gray-500 dark:text-gray-400">
+            <p className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400">
               PNG, JPG, or GIF. Max 2MB.
             </p>
           </div>
@@ -290,13 +294,15 @@ export default function Settings() {
             error={errors.logo?.message}
           />
 
-          <FlowButton type="submit" fullWidth loading={submitting} text="Save Company Details" color="success" />
+          <div className="pt-2 sm:pt-4">
+            <FlowButton type="submit" fullWidth loading={submitting} text="Save Company Details" color="success" />
+          </div>
         </form>
       </Card>
 
 
       <Card>
-        <h2 className="text-lg font-semibold mb-4">Account</h2>
+        <h2 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Account</h2>
         <FlowButton
           fullWidth
           onClick={handleSignOut}
@@ -305,7 +311,7 @@ export default function Settings() {
         />
       </Card>
 
-      <div className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
+      <div className="mt-6 sm:mt-8 text-center text-xs sm:text-sm text-gray-500 dark:text-gray-400">
         <p>PO Generator v1.0.0</p>
         <p className="mt-1">Mobile-first Purchase Order Management</p>
       </div>

@@ -28,6 +28,7 @@ export const DataProvider = ({ children }) => {
   const [products, setProducts] = useState([])
   const [customers, setCustomers] = useState([])
   const [purchaseOrders, setPurchaseOrders] = useState([])
+  const [qualityRecords, setQualityRecords] = useState([])
   const [companyDetails, setCompanyDetails] = useState(null)
   const [loading, setLoading] = useState(false)
 
@@ -39,11 +40,12 @@ export const DataProvider = ({ children }) => {
     try {
       if (isOnline) {
         // Fetch from Supabase
-        const [millsRes, productsRes, customersRes, posRes, companyRes] = await Promise.all([
+        const [millsRes, productsRes, customersRes, posRes, qualityRes, companyRes] = await Promise.all([
           supabase.from('mills').select('*').eq('user_id', user.id),
           supabase.from('products').select('*').eq('user_id', user.id),
           supabase.from('customers').select('*').eq('user_id', user.id),
           supabase.from('purchase_orders').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
+          supabase.from('quality_records').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
           supabase.from('company_details').select('*').eq('user_id', user.id).single()
         ])
 
@@ -52,6 +54,7 @@ export const DataProvider = ({ children }) => {
           products: productsRes.data || [],
           customers: customersRes.data || [],
           purchaseOrders: posRes.data || [],
+          qualityRecords: qualityRes.data || [],
           companyDetails: companyRes.data || null
         }
 
@@ -59,6 +62,7 @@ export const DataProvider = ({ children }) => {
         setProducts(data.products)
         setCustomers(data.customers)
         setPurchaseOrders(data.purchaseOrders)
+        setQualityRecords(data.qualityRecords)
         setCompanyDetails(data.companyDetails)
 
         // Cache offline
@@ -66,14 +70,16 @@ export const DataProvider = ({ children }) => {
         await saveOfflineData('products', data.products)
         await saveOfflineData('customers', data.customers)
         await saveOfflineData('purchaseOrders', data.purchaseOrders)
+        await saveOfflineData('qualityRecords', data.qualityRecords)
         await saveOfflineData('companyDetails', data.companyDetails)
       } else {
         // Load from offline cache
-        const [millsData, productsData, customersData, posData, companyData] = await Promise.all([
+        const [millsData, productsData, customersData, posData, qualityData, companyData] = await Promise.all([
           getOfflineData('mills'),
           getOfflineData('products'),
           getOfflineData('customers'),
           getOfflineData('purchaseOrders'),
+          getOfflineData('qualityRecords'),
           getOfflineData('companyDetails')
         ])
 
@@ -81,6 +87,7 @@ export const DataProvider = ({ children }) => {
         setProducts(productsData || [])
         setCustomers(customersData || [])
         setPurchaseOrders(posData || [])
+        setQualityRecords(qualityData || [])
         setCompanyDetails(companyData || null)
       }
     } catch (error) {
@@ -358,6 +365,61 @@ export const DataProvider = ({ children }) => {
     }
   }
 
+  // Quality Records CRUD operations
+  const addQualityRecord = async (qualityData) => {
+    const newRecord = {
+      ...qualityData,
+      id: Date.now().toString(),
+      created_at: new Date().toISOString()
+    }
+    setQualityRecords([newRecord, ...qualityRecords])
+
+    if (isOnline) {
+      const { data, error } = await supabase
+        .from('quality_records')
+        .insert({ ...qualityData, user_id: user.id })
+        .select()
+        .single()
+      if (error) throw error
+      setQualityRecords(prev => prev.map(q => q.id === newRecord.id ? data : q))
+    } else {
+      await addToSyncQueue({ table: 'quality_records', action: 'insert', data: qualityData })
+      await saveOfflineData('qualityRecords', [newRecord, ...qualityRecords])
+    }
+  }
+
+  const updateQualityRecord = async (id, updates) => {
+    setQualityRecords(qualityRecords.map(q => q.id === id ? { ...q, ...updates } : q))
+
+    if (isOnline) {
+      const { error } = await supabase
+        .from('quality_records')
+        .update(updates)
+        .eq('id', id)
+        .eq('user_id', user.id)
+      if (error) throw error
+    } else {
+      await addToSyncQueue({ table: 'quality_records', action: 'update', data: { id, ...updates } })
+      await saveOfflineData('qualityRecords', qualityRecords.map(q => q.id === id ? { ...q, ...updates } : q))
+    }
+  }
+
+  const deleteQualityRecord = async (id) => {
+    setQualityRecords(qualityRecords.filter(q => q.id !== id))
+
+    if (isOnline) {
+      const { error } = await supabase
+        .from('quality_records')
+        .delete()
+        .eq('id', id)
+        .eq('user_id', user.id)
+      if (error) throw error
+    } else {
+      await addToSyncQueue({ table: 'quality_records', action: 'delete', data: { id } })
+      await saveOfflineData('qualityRecords', qualityRecords.filter(q => q.id !== id))
+    }
+  }
+
   useEffect(() => {
     fetchData()
   }, [user, isOnline])
@@ -373,6 +435,7 @@ export const DataProvider = ({ children }) => {
     products,
     customers,
     purchaseOrders,
+    qualityRecords,
     companyDetails,
     loading,
     addMill,
@@ -387,6 +450,9 @@ export const DataProvider = ({ children }) => {
     addPurchaseOrder,
     updatePO,
     deletePO,
+    addQualityRecord,
+    updateQualityRecord,
+    deleteQualityRecord,
     updateCompanyDetails,
     refreshData: fetchData
   }

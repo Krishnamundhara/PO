@@ -193,21 +193,21 @@ export default function CreatePO() {
 
   if (showPreview && formData) {
     return (
-      <div className="container-mobile py-6">
-        <div className="mb-4 flex items-center justify-between">
+      <div className="container-mobile py-4 sm:py-6">
+        <div className="mb-3 sm:mb-4 flex items-center justify-between">
           <button
             onClick={() => setShowPreview(false)}
-            className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
+            className="flex items-center gap-1.5 sm:gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors text-sm sm:text-base"
           >
-            <ArrowLeft size={20} />
+            <ArrowLeft size={18} className="sm:w-5 sm:h-5" />
             Back to Edit
           </button>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-4 transition-colors">
-          <h2 className="text-xl font-bold mb-4 text-center">Purchase Order Preview</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl shadow-sm p-4 sm:p-6 mb-3 sm:mb-4 transition-colors max-w-2xl">
+          <h2 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-center">Purchase Order Preview</h2>
           
-          <div className="space-y-3 border-t dark:border-gray-700 pt-4">
+          <div className="space-y-2 sm:space-y-3 border-t dark:border-gray-700 pt-3 sm:pt-4 text-sm sm:text-base">
             <div className="flex justify-between">
               <span className="font-medium">PO Number:</span>
               <span>{formData.po_number}</span>
@@ -218,7 +218,7 @@ export default function CreatePO() {
             </div>
             <div className="flex justify-between">
               <span className="font-medium">Party Name:</span>
-              <span>{formData.party_name}</span>
+              <span className="text-right ml-2 truncate">{formData.party_name}</span>
             </div>
             {formData.broker && (
               <div className="flex justify-between">
@@ -228,11 +228,11 @@ export default function CreatePO() {
             )}
             <div className="flex justify-between">
               <span className="font-medium">Mill:</span>
-              <span>{formData.mill}</span>
+              <span className="text-right ml-2 truncate">{formData.mill}</span>
             </div>
             <div className="flex justify-between">
               <span className="font-medium">Product:</span>
-              <span>{formData.product}</span>
+              <span className="text-right ml-2 truncate">{formData.product}</span>
             </div>
             <div className="flex justify-between">
               <span className="font-medium">Rate:</span>
@@ -247,45 +247,49 @@ export default function CreatePO() {
               <span>{formData.quantity} {formData.quantity_unit}</span>
             </div>
             {formData.terms_conditions && (
-              <div className="pt-3 border-t dark:border-gray-700">
+              <div className="pt-2 sm:pt-2 sm:pt-3 border-t dark:border-gray-700">
                 <span className="font-medium">Terms & Conditions:</span>
-                <p className="mt-2 text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{formData.terms_conditions}</p>
+                <p className="mt-1 sm:mt-2 text-gray-700 dark:text-gray-300 whitespace-pre-wrap text-xs sm:text-sm">{formData.terms_conditions}</p>
               </div>
             )}
           </div>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-2 sm:space-y-3 max-w-2xl">
           <FlowButton fullWidth onClick={handleConfirm} loading={loading} text="Confirm & Save" color="success" />
-          <FlowButton fullWidth onClick={handleDownload} text="Download PDF" color="info" />
-          <FlowButton fullWidth onClick={handleShare} text="Share PDF" color="info" />
+          <div className="grid grid-cols-2 gap-2 sm:gap-3">
+            <FlowButton fullWidth onClick={handleDownload} text="Download PDF" color="info" />
+            <FlowButton fullWidth onClick={handleShare} text="Share PDF" color="info" />
+          </div>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="container-mobile py-6">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold">Create Purchase Order</h1>
-        <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">Fill in the details below</p>
+    <div className="container-mobile py-4 sm:py-6">
+      <div className="mb-4 sm:mb-6">
+        <h1 className="text-xl sm:text-2xl font-bold">Create Purchase Order</h1>
+        <p className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm mt-1">Fill in the details below</p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <Input
-          label="PO Number"
-          required
-          {...register('po_number')}
-          error={errors.po_number?.message}
-        />
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 sm:space-y-4 max-w-2xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+          <Input
+            label="PO Number"
+            required
+            {...register('po_number')}
+            error={errors.po_number?.message}
+          />
 
-        <Input
-          type="date"
-          label="Date"
-          required
-          {...register('date')}
-          error={errors.date?.message}
-        />
+          <Input
+            type="date"
+            label="Date"
+            required
+            {...register('date')}
+            error={errors.date?.message}
+          />
+        </div>
 
         <div className="flex gap-2 items-end">
           <div className="flex-1">
@@ -301,10 +305,10 @@ export default function CreatePO() {
           <button
             type="button"
             onClick={() => setCustomerModalOpen(true)}
-            className="mb-1 p-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 hover:scale-110 hover:rotate-90 active:scale-95 transition-all duration-200 shadow-md hover:shadow-lg"
+            className="flex-shrink-0 mb-1 p-2 sm:p-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 hover:scale-110 hover:rotate-90 active:scale-95 transition-all duration-200 shadow-md hover:shadow-lg"
             title="Add new customer"
           >
-            <Plus size={20} />
+            <Plus size={18} className="sm:w-5 sm:h-5" />
           </button>
         </div>
 
@@ -328,10 +332,10 @@ export default function CreatePO() {
           <button
             type="button"
             onClick={() => setMillModalOpen(true)}
-            className="mb-1 p-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 hover:scale-110 hover:rotate-90 active:scale-95 transition-all duration-200 shadow-md hover:shadow-lg"
+            className="flex-shrink-0 mb-1 p-2 sm:p-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 hover:scale-110 hover:rotate-90 active:scale-95 transition-all duration-200 shadow-md hover:shadow-lg"
             title="Add new mill"
           >
-            <Plus size={20} />
+            <Plus size={18} className="sm:w-5 sm:h-5" />
           </button>
         </div>
 
@@ -349,10 +353,10 @@ export default function CreatePO() {
           <button
             type="button"
             onClick={() => setProductModalOpen(true)}
-            className="mb-1 p-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 hover:scale-110 hover:rotate-90 active:scale-95 transition-all duration-200 shadow-md hover:shadow-lg"
+            className="flex-shrink-0 mb-1 p-2 sm:p-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 hover:scale-110 hover:rotate-90 active:scale-95 transition-all duration-200 shadow-md hover:shadow-lg"
             title="Add new product"
           >
-            <Plus size={20} />
+            <Plus size={18} className="sm:w-5 sm:h-5" />
           </button>
         </div>
 
@@ -365,7 +369,7 @@ export default function CreatePO() {
           error={errors.rate?.message}
         />
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-2 sm:gap-4">
           <Input
             label="Weight"
             required
@@ -384,7 +388,7 @@ export default function CreatePO() {
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-2 sm:gap-4">
           <Input
             label="Quantity"
             required
@@ -405,12 +409,12 @@ export default function CreatePO() {
 
         <Textarea
           label="Terms & Conditions"
-          rows={4}
+          rows={3}
           {...register('terms_conditions')}
           error={errors.terms_conditions?.message}
         />
 
-        <div className="pt-4">
+        <div className="pt-2 sm:pt-4">
           <FlowButton type="submit" fullWidth text="Preview Order" />
         </div>
       </form>

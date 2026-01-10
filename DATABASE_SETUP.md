@@ -170,7 +170,46 @@ CREATE POLICY "Users can delete their own purchase orders"
   USING (auth.uid() = user_id);
 ```
 
-### 6. Company Details Table
+### 6. Quality Records Table
+
+```sql
+CREATE TABLE quality_records (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  sr_no TEXT NOT NULL,
+  width TEXT NOT NULL,
+  quality TEXT NOT NULL,
+  reed_on_loom TEXT NOT NULL,
+  peek_on_loom TEXT NOT NULL,
+  weight TEXT NOT NULL,
+  rate TEXT NOT NULL,
+  remark TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Enable RLS
+ALTER TABLE quality_records ENABLE ROW LEVEL SECURITY;
+
+-- RLS Policies
+CREATE POLICY "Users can view their own quality records"
+  ON quality_records FOR SELECT
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert their own quality records"
+  ON quality_records FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update their own quality records"
+  ON quality_records FOR UPDATE
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete their own quality records"
+  ON quality_records FOR DELETE
+  USING (auth.uid() = user_id);
+```
+
+### 7. Company Details Table
 
 ```sql
 CREATE TABLE company_details (
@@ -208,7 +247,7 @@ CREATE POLICY "Users can delete their own company details"
   USING (auth.uid() = user_id);
 ```
 
-### 7. Updated_at Trigger Function
+### 8. Updated_at Trigger Function
 
 ```sql
 -- Function to automatically update updated_at timestamp
@@ -241,6 +280,11 @@ CREATE TRIGGER update_purchase_orders_updated_at
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at_column();
 
+CREATE TRIGGER update_quality_records_updated_at
+  BEFORE UPDATE ON quality_records
+  FOR EACH ROW
+  EXECUTE FUNCTION update_updated_at_column();
+
 CREATE TRIGGER update_company_details_updated_at
   BEFORE UPDATE ON company_details
   FOR EACH ROW
@@ -257,6 +301,8 @@ CREATE INDEX idx_customers_user_id ON customers(user_id);
 CREATE INDEX idx_purchase_orders_user_id ON purchase_orders(user_id);
 CREATE INDEX idx_purchase_orders_po_number ON purchase_orders(po_number);
 CREATE INDEX idx_purchase_orders_created_at ON purchase_orders(created_at DESC);
+CREATE INDEX idx_quality_records_user_id ON quality_records(user_id);
+CREATE INDEX idx_quality_records_created_at ON quality_records(created_at DESC);
 CREATE INDEX idx_company_details_user_id ON company_details(user_id);
 ```
 

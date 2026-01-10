@@ -13,12 +13,15 @@ import Loading from './components/Loading'
 // Lazy load page components for code splitting
 const Dashboard = lazy(() => import('./pages/Dashboard'))
 const CreatePO = lazy(() => import('./pages/CreatePO'))
+const CreateQuality = lazy(() => import('./pages/CreateQuality'))
 const Mills = lazy(() => import('./pages/Mills'))
 const Products = lazy(() => import('./pages/Products'))
 const Customers = lazy(() => import('./pages/Customers'))
 const OrderHistory = lazy(() => import('./pages/OrderHistory'))
+const QualityRecords = lazy(() => import('./pages/QualityRecords'))
 const Settings = lazy(() => import('./pages/Settings'))
 const FlowButtonDemo = lazy(() => import('./pages/FlowButtonDemo'))
+const Manager = lazy(() => import('./pages/Manager'))
 
 function App() {
   return (
@@ -41,6 +44,11 @@ function App() {
                     <CreatePO />
                   </Suspense>
                 } />
+                <Route path="/create-quality" element={
+                  <Suspense fallback={<Loading />}>
+                    <CreateQuality />
+                  </Suspense>
+                } />
                 <Route path="/mills" element={
                   <Suspense fallback={<Loading />}>
                     <Mills />
@@ -61,6 +69,11 @@ function App() {
                     <OrderHistory />
                   </Suspense>
                 } />
+                <Route path="/quality-records" element={
+                  <Suspense fallback={<Loading />}>
+                    <QualityRecords />
+                  </Suspense>
+                } />
                 <Route path="/settings" element={
                   <Suspense fallback={<Loading />}>
                     <Settings />
@@ -69,6 +82,11 @@ function App() {
                 <Route path="/flow-button-demo" element={
                   <Suspense fallback={<Loading />}>
                     <FlowButtonDemo />
+                  </Suspense>
+                } />
+                <Route path="/manager" element={
+                  <Suspense fallback={<Loading />}>
+                    <Manager />
                   </Suspense>
                 } />
               </Route>

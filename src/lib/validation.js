@@ -46,3 +46,14 @@ export const companyDetailsSchema = z.object({
   branch: z.string().optional(),
   logo: z.string().optional()
 })
+
+export const qualityRecordSchema = z.object({
+  sr_no: z.string().min(1, 'SR No. is required'),
+  width: z.string().min(1, 'Width is required'),
+  quality: z.string().min(1, 'Quality is required'),
+  reed_on_loom: z.string().min(1, 'Reed on Loom is required'),
+  peek_on_loom: z.string().min(1, 'Peek on Loom is required'),
+  weight: z.string().min(1, 'Weight is required'),
+  rate: z.string().min(1, 'Rate is required'),
+  remark: z.string().optional()
+})

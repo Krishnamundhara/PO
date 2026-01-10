@@ -55,29 +55,31 @@ export default function EditPOModal({ isOpen, onClose, order, onSave }) {
       isOpen={isOpen}
       onClose={onClose}
       title={`Edit PO #${order?.po_number}`}
-      maxWidth="max-w-2xl"
+      maxWidth="max-w-lg"
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-h-[60vh] overflow-y-auto">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 sm:space-y-4 max-h-[65vh] overflow-y-auto overscroll-contain px-0.5">
         {error && (
-          <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+          <div className="p-2 sm:p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-xs sm:text-sm">
             {error}
           </div>
         )}
 
-        <Input
-          label="PO Number"
-          required
-          {...register('po_number')}
-          error={errors.po_number?.message}
-        />
+        <div className="grid grid-cols-2 gap-3">
+          <Input
+            label="PO Number"
+            required
+            {...register('po_number')}
+            error={errors.po_number?.message}
+          />
 
-        <Input
-          type="date"
-          label="Date"
-          required
-          {...register('date')}
-          error={errors.date?.message}
-        />
+          <Input
+            type="date"
+            label="Date"
+            required
+            {...register('date')}
+            error={errors.date?.message}
+          />
+        </div>
 
         <Select
           label="Party Name"
@@ -94,23 +96,25 @@ export default function EditPOModal({ isOpen, onClose, order, onSave }) {
           error={errors.broker?.message}
         />
 
-        <Select
-          label="Mill"
-          required
-          options={mills.map(m => ({ value: m.name, label: m.name }))}
-          placeholder="Select mill"
-          {...register('mill')}
-          error={errors.mill?.message}
-        />
+        <div className="grid grid-cols-2 gap-3">
+          <Select
+            label="Mill"
+            required
+            options={mills.map(m => ({ value: m.name, label: m.name }))}
+            placeholder="Select mill"
+            {...register('mill')}
+            error={errors.mill?.message}
+          />
 
-        <Select
-          label="Product"
-          required
-          options={products.map(p => ({ value: p.name, label: p.name }))}
-          placeholder="Select product"
-          {...register('product')}
-          error={errors.product?.message}
-        />
+          <Select
+            label="Product"
+            required
+            options={products.map(p => ({ value: p.name, label: p.name }))}
+            placeholder="Select product"
+            {...register('product')}
+            error={errors.product?.message}
+          />
+        </div>
 
         <Input
           label="Rate"
@@ -121,7 +125,7 @@ export default function EditPOModal({ isOpen, onClose, order, onSave }) {
           error={errors.rate?.message}
         />
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3">
           <Input
             label="Weight"
             required
@@ -140,7 +144,7 @@ export default function EditPOModal({ isOpen, onClose, order, onSave }) {
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3">
           <Input
             label="Quantity"
             required
@@ -161,17 +165,17 @@ export default function EditPOModal({ isOpen, onClose, order, onSave }) {
 
         <Textarea
           label="Terms & Conditions"
-          rows={4}
+          rows={3}
           {...register('terms_conditions')}
           error={errors.terms_conditions?.message}
         />
 
-        <div className="flex gap-3 pt-4">
+        <div className="flex gap-2 sm:gap-3 pt-3 sm:pt-4 sticky bottom-0 bg-white dark:bg-gray-800 pb-1">
           <Button type="button" variant="secondary" onClick={onClose} fullWidth>
             Cancel
           </Button>
           <Button type="submit" fullWidth loading={submitting}>
-            Update PO
+            Update
           </Button>
         </div>
       </form>

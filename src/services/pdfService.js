@@ -172,3 +172,169 @@ const createPDFContent = (po, companyDetails) => {
     
   `
 }
+
+// Quality Record PDF Generation
+const createQualityPDFContent = (quality, companyDetails) => {
+  return `
+    <div style="padding: 20px; font-family: Arial, sans-serif;">
+      <!-- Header -->
+      <div style="text-align: center; margin-bottom: 1px;">
+        <h1 style="font-size: 18px; margin: 0; font-family: serif;">|| श्री:गणेशाय नमः ||</h1>
+      </div>
+
+      <!-- Company Details -->
+      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 1px; gap: 15px;">
+        ${companyDetails?.logo ? `<div><img src="${companyDetails.logo}" style="max-width: 100px; max-height: 100px; object-fit: contain;" /></div>` : ''}
+        <div style="text-align: left;">
+          <h2 style="font-size: 18px; margin: 5px 0; font-weight: bold;">${companyDetails?.name || 'Company Name'}</h2>
+          <p style="font-size: 12px; margin: 5px 0; line-height: 1.4;">${companyDetails?.address || ''}</p>
+        </div>
+      </div>
+
+      <!-- Title -->
+      <h2 style="text-align: center; margin: 15px 0 10px; font-size: 16px; font-weight: bold;">Quality Record</h2>
+
+      <!-- Quality Details Table -->
+      <table style="width: 100%; border-collapse: collapse; margin: 5px 0; border: 1px solid #000;">
+        <tr>
+          <td style="padding: 8px 12px; border: 1px solid #000; font-weight: bold; width: 40%;">SR No:</td>
+          <td style="padding: 8px 12px; border: 1px solid #000;">${quality.sr_no || ''}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 12px; border: 1px solid #000; font-weight: bold;">Width:</td>
+          <td style="padding: 8px 12px; border: 1px solid #000;">${quality.width || ''}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 12px; border: 1px solid #000; font-weight: bold;">Quality:</td>
+          <td style="padding: 8px 12px; border: 1px solid #000;">${quality.quality || ''}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 12px; border: 1px solid #000; font-weight: bold;">Reed on Loom:</td>
+          <td style="padding: 8px 12px; border: 1px solid #000;">${quality.reed_on_loom || ''}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 12px; border: 1px solid #000; font-weight: bold;">Peek on Loom:</td>
+          <td style="padding: 8px 12px; border: 1px solid #000;">${quality.peek_on_loom || ''}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 12px; border: 1px solid #000; font-weight: bold;">Weight:</td>
+          <td style="padding: 8px 12px; border: 1px solid #000;">${quality.weight || ''}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 12px; border: 1px solid #000; font-weight: bold;">Rate:</td>
+          <td style="padding: 8px 12px; border: 1px solid #000;">₹${quality.rate || ''}</td>
+        </tr>
+        ${quality.remark ? `
+        <tr>
+          <td style="padding: 8px 12px; border: 1px solid #000; font-weight: bold;">Remark:</td>
+          <td style="padding: 8px 12px; border: 1px solid #000;">${quality.remark}</td>
+        </tr>
+        ` : ''}
+      </table>
+
+      <!-- Bank Details Footer -->
+      ${companyDetails?.bank_name ? `
+      <div style="margin-top: 15px; font-size: 12px; font-weight: bold;">
+        <span>BANK DETAILS</span><br/>
+        <span>${companyDetails.bank_name}${companyDetails.account_number ? ` , ACCOUNT NO ${companyDetails.account_number}` : ''}${companyDetails.ifsc_code ? ` , IFSC: ${companyDetails.ifsc_code}` : ''}${companyDetails.branch ? ` , BRANCH: ${companyDetails.branch}` : ''}</span>
+      </div>
+      ` : ''}
+    </div>
+  `
+}
+
+export const generateQualityPDF = async (quality, companyDetails) => {
+  const content = createQualityPDFContent(quality, companyDetails)
+  
+  // Create a temporary div
+  const div = document.createElement('div')
+  div.innerHTML = content
+  div.style.position = 'absolute'
+  div.style.left = '-9999px'
+  div.style.width = '210mm'
+  div.style.padding = '20px'
+  div.style.backgroundColor = 'white'
+  div.style.fontFamily = 'Arial, sans-serif'
+  document.body.appendChild(div)
+
+  try {
+    // Wait for images to load with timeout
+    const images = div.querySelectorAll('img')
+    await Promise.all(Array.from(images).map(img => new Promise((resolve) => {
+      const timeout = setTimeout(resolve, 2000)
+      img.onload = () => {
+        clearTimeout(timeout)
+        resolve()
+      }
+      img.onerror = () => {
+        clearTimeout(timeout)
+        resolve()
+      }
+      if (img.complete) {
+        clearTimeout(timeout)
+        resolve()
+      }
+    })))
+
+    await new Promise(resolve => setTimeout(resolve, 500))
+
+    // Convert to canvas
+    const canvas = await html2canvas(div, {
+      scale: 2,
+      useCORS: true,
+      logging: false,
+      allowTaint: true,
+      backgroundColor: '#ffffff'
+    })
+
+    // Create PDF
+    const imgData = canvas.toDataURL('image/png')
+    const pdf = new jsPDF('p', 'mm', 'a4')
+    const imgWidth = 210
+    const imgHeight = (canvas.height * imgWidth) / canvas.width
+    
+    pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight)
+    
+    // Clean up
+    document.body.removeChild(div)
+    
+    return pdf
+  } catch (error) {
+    if (document.body.contains(div)) {
+      document.body.removeChild(div)
+    }
+    throw error
+  }
+}
+
+export const downloadQualityPDF = async (quality, companyDetails) => {
+  try {
+    const pdf = await generateQualityPDF(quality, companyDetails)
+    pdf.save(`Quality-${quality.sr_no}.pdf`)
+  } catch (error) {
+    console.error('Error generating quality PDF:', error)
+    throw error
+  }
+}
+
+export const shareQualityPDF = async (quality, companyDetails) => {
+  try {
+    const pdf = await generateQualityPDF(quality, companyDetails)
+    const blob = pdf.output('blob')
+    
+    if (navigator.share && navigator.canShare({ files: [new File([blob], `Quality-${quality.sr_no}.pdf`, { type: 'application/pdf' })] })) {
+      const file = new File([blob], `Quality-${quality.sr_no}.pdf`, { type: 'application/pdf' })
+      await navigator.share({
+        files: [file],
+        title: `Quality Record ${quality.sr_no}`,
+        text: `Quality Record for SR No ${quality.sr_no}`
+      })
+    } else {
+      // Fallback to download
+      await downloadQualityPDF(quality, companyDetails)
+    }
+  } catch (error) {
+    console.error('Error sharing quality PDF:', error)
+    throw error
+  }
+}

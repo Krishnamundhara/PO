@@ -19,7 +19,7 @@ export default function Modal({ isOpen, onClose, title, children, maxWidth = 'ma
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black/40 backdrop-blur-sm animate-fade-in"
@@ -27,22 +27,22 @@ export default function Modal({ isOpen, onClose, title, children, maxWidth = 'ma
       />
       
       {/* Modal Container */}
-      <div className="fixed bottom-20 md:bottom-auto left-0 right-0 md:left-auto md:right-auto md:top-1/2 md:-translate-y-1/2 flex p-2 md:p-4 overflow-y-auto md:overflow-visible max-h-[80vh] md:max-h-[90vh] animate-slide-up md:animate-zoom-in">
+      <div className="relative w-full sm:w-auto flex justify-center items-end sm:items-center max-h-[85vh] sm:max-h-[90vh] animate-slide-up sm:animate-zoom-in">
         {/* Modal */}
-        <div className={`relative bg-white dark:bg-gray-800 rounded-t-2xl md:rounded-2xl shadow-2xl w-full mx-2 md:mx-0 ${maxWidth} max-h-[80vh] md:max-h-[90vh] overflow-hidden flex flex-col border border-gray-100 dark:border-gray-700 transition-colors`}>
+        <div className={`relative bg-white dark:bg-gray-800 rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:mx-4 ${maxWidth} max-h-[85vh] sm:max-h-[90vh] overflow-hidden flex flex-col border-t sm:border border-gray-100 dark:border-gray-700 transition-colors mb-14 sm:mb-0`}>
           {/* Header */}
-          <div className="flex-shrink-0 bg-white dark:bg-gray-800 flex items-center justify-between p-3 md:p-4 border-b dark:border-gray-700 z-10 sticky top-0 transition-colors">
-            <h2 className="text-base md:text-lg font-semibold text-gray-900 dark:text-gray-100">{title}</h2>
+          <div className="flex-shrink-0 bg-white dark:bg-gray-800 flex items-center justify-between p-3 sm:p-4 border-b dark:border-gray-700 z-10 sticky top-0 transition-colors">
+            <h2 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 dark:text-gray-100 truncate pr-2">{title}</h2>
             <button
               onClick={onClose}
-              className="tap-target p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:rotate-90 hover:scale-110 active:scale-95 rounded-lg transition-all duration-200"
+              className="tap-target p-1.5 sm:p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:rotate-90 hover:scale-110 active:scale-95 rounded-lg transition-all duration-200 flex-shrink-0"
             >
-              <X size={24} />
+              <X size={20} className="sm:w-6 sm:h-6" />
             </button>
           </div>
           
           {/* Content - Scrollable */}
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 overflow-y-auto overscroll-contain p-3 sm:p-4">
             {children}
           </div>
         </div>
