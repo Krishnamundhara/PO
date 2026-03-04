@@ -119,9 +119,9 @@ export default function QualityRecords() {
                     color="info"
                   />
                   <FlowButton
-                    onClick={() => handleShare(record)}
-                    text="Share"
-                    color="info"
+                    onClick={() => editRecord(record)}
+                    text="Edit"
+                    color="warning"
                   />
                   <FlowButton
                     onClick={() => handleDownload(record)}
@@ -195,21 +195,15 @@ export default function QualityRecords() {
           <div className="grid grid-cols-2 gap-2 sm:gap-3 mt-4 sm:mt-6">
             <FlowButton
               fullWidth
-              onClick={() => {
-                setIsModalOpen(false)
-                editRecord(selectedRecord)
-              }}
-              text="Edit"
-              color="warning"
+              onClick={() => handleDownload(selectedRecord)}
+              text="Download"
+              color="info"
             />
             <FlowButton
               fullWidth
-              onClick={() => {
-                setIsModalOpen(false)
-                setDeleteConfirm(selectedRecord.id)
-              }}
-              text="Delete"
-              color="danger"
+              onClick={() => handleShare(selectedRecord)}
+              text="Share"
+              color="info"
             />
           </div>
         </Modal>
